@@ -1,4 +1,4 @@
-package osp.sparkj.more
+package osp.sparkj
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import osp.sparkj.more.ui.theme.MoreTheme
+import osp.sparkj.ui.theme.MoreTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

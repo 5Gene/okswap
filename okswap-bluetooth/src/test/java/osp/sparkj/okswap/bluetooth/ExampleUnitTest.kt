@@ -1,4 +1,4 @@
-package osp.sparkj
+package osp.sparkj.okswap.bluetooth
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

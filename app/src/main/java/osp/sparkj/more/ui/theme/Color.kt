@@ -1,4 +1,4 @@
-package osp.sparkj.more.ui.theme
+package osp.sparkj.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

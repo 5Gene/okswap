@@ -1,4 +1,4 @@
-package osp.sparkj
+package osp.sparkj.okswap.ipc
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("osp.sparkj", appContext.packageName)
+        assertEquals("osp.sparkj.okswap.ipc.test", appContext.packageName)
     }
 }
