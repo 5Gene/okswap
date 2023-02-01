@@ -1,4 +1,6 @@
-package osp.sparkj.more
+package osp.sparkj.more.okswap.interceptors
+
+import osp.sparkj.more.okswap.OkClient
 
 
 /**
@@ -10,8 +12,7 @@ package osp.sparkj.more
  */
 fun interface Interceptor<Request, Response> {
 
-
-    fun intercept(chain: Chain<Request, Response>): Response
+   suspend fun intercept(chain: Chain<Request, Response>): Response
 
     companion object {
         /**
@@ -32,30 +33,40 @@ fun interface Interceptor<Request, Response> {
         fun request(): Request
 
         @Throws(Exception::class)
-        fun proceed(request: Request): Response
+        suspend fun proceed(request: Request): Response
+
+        fun client(): OkClient<Request, Response>
 
     }
 }
 
 class RealInterceptorChain<Request, Response>(
+    private val okClient: OkClient<Request, Response>,
     private val interceptors: List<Interceptor<Request, Response>>,
     private val index: Int,
-    internal val request: Request
+    private val request: Request,
+    private val map: MutableMap<String, Any>
 ) : Interceptor.Chain<Request, Response> {
 
-    internal fun copy(
+    private fun copy(
         index: Int = this.index,
         request: Request = this.request
-    ) = RealInterceptorChain(this.interceptors, index, request)
+    ) = RealInterceptorChain(okClient, this.interceptors, index, request, map)
+
+    fun map() = map
 
     override fun request(): Request {
         return request
     }
 
-    override fun proceed(request: Request): Response {
+
+
+    override suspend fun proceed(request: Request): Response {
         check(index < interceptors.size)
         val next = copy(index + 1, request)
         val interceptor = interceptors[index]
         return interceptor.intercept(next)
     }
+
+    override fun client(): OkClient<Request, Response> = okClient
 }
