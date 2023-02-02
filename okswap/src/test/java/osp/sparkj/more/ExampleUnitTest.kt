@@ -34,7 +34,7 @@ class ExampleUnitTest {
                 it.request().url.oklog()
                 delay(2000)
                 Response(it.request().url.substring(it.request().url.length-1))
-                it.proceed(it.request())
+//                it.proceed(it.request())
             })
             .addNetworkInterceptor(Interceptor<Request, Response> {
                 suspendCoroutine<Response> {
@@ -47,14 +47,14 @@ class ExampleUnitTest {
         scope.launch(handler) {
             try {
                 val response = client.newCall(Request("请求测试1")).enqueue()
-                println("${System.currentTimeMillis() / 1000} == ${response.body}")
+                "${System.currentTimeMillis() / 1000} == ${response.body}".soutThread()
             } catch (e: Exception) {
                 println("---------${e.message}")
             }
         }
 
-//        presstest(scope, handler, client)
-        println("response.body")
+        presstest(scope, handler, client)
+//        println("response.body")
         runBlocking {
             delay(26000)
         }
@@ -68,7 +68,11 @@ class ExampleUnitTest {
         scope.launch(handler) {
             try {
                 val response = client.newCall(Request("请求测试1")).enqueue()
-                println("${System.currentTimeMillis() / 1000} == ${response.body}")
+                withContext(Dispatchers.Main) {
+                    "${System.currentTimeMillis() / 1000} == ${response.body}".soutThread()
+                }
+
+
             } catch (e: Exception) {
                 println("---------${e.message}")
             }
@@ -76,7 +80,7 @@ class ExampleUnitTest {
         scope.launch(handler) {
             try {
                 val response = client.newCall(Request("请求测试2")).enqueue()
-                println("${System.currentTimeMillis() / 1000} == ${response.body}")
+                "${System.currentTimeMillis() / 1000} == ${response.body}".soutThread()
             } catch (e: Exception) {
                 println("---------${e.message}")
             }
@@ -84,7 +88,7 @@ class ExampleUnitTest {
         scope.launch(handler) {
             try {
                 val response = client.newCall(Request("请求测试3")).enqueue()
-                println("${System.currentTimeMillis() / 1000} == ${response.body}")
+                "${System.currentTimeMillis() / 1000} == ${response.body}".soutThread()
             } catch (e: Exception) {
                 println("---------${e.message}")
             }
@@ -92,7 +96,7 @@ class ExampleUnitTest {
         scope.launch(handler) {
             try {
                 val response = client.newCall(Request("请求测试4")).enqueue()
-                println("${System.currentTimeMillis() / 1000} == ${response.body}")
+                "${System.currentTimeMillis() / 1000} == ${response.body}".soutThread()
             } catch (e: Exception) {
                 println("---------${e.message}")
             }
@@ -100,7 +104,7 @@ class ExampleUnitTest {
         scope.launch(handler) {
             try {
                 val response = client.newCall(Request("请求测试5")).enqueue()
-                println("${System.currentTimeMillis() / 1000} == ${response.body}")
+                "${System.currentTimeMillis() / 1000} == ${response.body}".soutThread()
             } catch (e: Exception) {
                 println("---------${e.message}")
             }
@@ -108,7 +112,7 @@ class ExampleUnitTest {
         scope.launch(handler) {
             try {
                 val response = client.newCall(Request("请求测试6")).enqueue()
-                println("${System.currentTimeMillis() / 1000} == ${response.body}")
+                "${System.currentTimeMillis() / 1000} == ${response.body}".soutThread()
             } catch (e: Exception) {
                 println("---------${e.message}")
             }
@@ -116,7 +120,7 @@ class ExampleUnitTest {
         scope.launch(handler) {
             try {
                 val response = client.newCall(Request("请求测试7")).enqueue()
-                println("${System.currentTimeMillis() / 1000} == ${response.body}")
+                "${System.currentTimeMillis() / 1000} == ${response.body}".soutThread()
             } catch (e: Exception) {
                 println("---------${e.message}")
             }
@@ -124,12 +128,17 @@ class ExampleUnitTest {
         scope.launch(handler) {
             try {
                 val response = client.newCall(Request("请求测试8")).enqueue()
-                println("${System.currentTimeMillis() / 1000} == ${response.body}")
+                "${System.currentTimeMillis() / 1000} == ${response.body}".soutThread()
             } catch (e: Exception) {
                 println("---------${e.message}")
             }
         }
     }
+}
+
+fun String.soutThread() {
+    val threadname = "${Thread.currentThread().id} >> ${Thread.currentThread().name}"
+    println("$threadname $this")
 }
 
 data class Request(val url: String)

@@ -6,7 +6,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import java.util.*
 
-class Dispatcher<Request, Response> constructor() {
+class Dispatcher<Request, Response> {
     /**
      * The maximum number of requests to execute concurrently. Above this requests queue in memory,
      * waiting for the running calls to complete.
@@ -15,7 +15,7 @@ class Dispatcher<Request, Response> constructor() {
      * remain in flight.
      */
     @get:Synchronized
-    var maxRequests = 6
+    var maxRequests = 3
         set(maxRequests) {
             require(maxRequests >= 1) { "max < 1: $maxRequests" }
             synchronized(this) {

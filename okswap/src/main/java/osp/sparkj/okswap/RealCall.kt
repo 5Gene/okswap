@@ -82,6 +82,9 @@ class RealCall<Request, Response>(private val client: OkClient<Request, Response
     @Throws(IOException::class)
     internal suspend fun getResponseWithInterceptorChain(): Response {
         // Build a full stack of interceptors.
+        if (isCanceled()) {
+            throw java.lang.RuntimeException("Already canceled")
+        }
         val interceptors = mutableListOf<Interceptor<Request, Response>>()
         interceptors += client.interceptors
         interceptors += RetryInterceptor()
