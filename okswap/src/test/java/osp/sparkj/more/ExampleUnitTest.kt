@@ -15,6 +15,33 @@ import kotlin.coroutines.suspendCoroutine
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
+
+    class Stuf1 : PackBox.Stuff {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+            return true
+        }
+
+        override fun hashCode(): Int {
+            return javaClass.hashCode()
+        }
+    }
+
+    class Stuf2 : PackBox.Stuff {
+
+    }
+
+    @Test
+    fun test_packbox() {
+        val stuf1 = Stuf1()
+        val message = stuf1.then(stuf1).then(stuf1).then(Stuf2())
+        println(message)
+        val packBox = Stuf1() + Stuf2() + Stuf1()
+        println(packBox)
+    }
+
+
     @Test
     fun addition_isCorrect() {
         val handler = CoroutineExceptionHandler { coroutineContext, throwable ->
@@ -22,7 +49,7 @@ class ExampleUnitTest {
         }
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-        val client = OkClient.Builder<Request,Response>()
+        val client = OkClient.Builder<Request, Response>()
             .addInterceptor(Interceptor<Request, Response> { it.proceed(it.request()) })
             .addNetworkInterceptor(Interceptor<Request, Response> {
                 println("${Thread.currentThread().id} >> ${Thread.currentThread().name} 111 ")
@@ -33,7 +60,7 @@ class ExampleUnitTest {
                 println("${Thread.currentThread().id} >> ${Thread.currentThread().name} 222 ")
                 it.request().url.oklog()
                 delay(2000)
-                Response(it.request().url.substring(it.request().url.length-1))
+                Response(it.request().url.substring(it.request().url.length - 1))
 //                it.proceed(it.request())
             })
             .addNetworkInterceptor(Interceptor<Request, Response> {
