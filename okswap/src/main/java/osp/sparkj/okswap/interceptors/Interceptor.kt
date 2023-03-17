@@ -9,8 +9,8 @@ import osp.sparkj.okswap.RealCall
  * @author yun.
  * @date 2023/1/5
  * @des [一句话描述]
- * @since [https://github.com/mychoices]
- * <p><a href="https://github.com/mychoices">github</a>
+ * @since [https://github.com/5hmlA]
+ * <p><a href="https://github.com/5hmlA">github</a>
  */
 fun interface Interceptor<Request, Response> {
 
