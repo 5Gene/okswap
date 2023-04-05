@@ -14,9 +14,17 @@ interface Nest {
 
 
 interface Pigeon {
-    fun deliver(byteArray: ByteArray)
+    fun fly(byteArray: ByteArray)
 }
 
-interface Connect {
-    suspend fun connect(): Pigeon
+interface Address {}
+
+/**
+ * 驿站
+ * 两个驿站之间训练出信鸽
+ */
+interface Relay<ADDR : Address> {
+
+    var address: ADDR
+    suspend fun train(peer: Relay<ADDR>): Pigeon
 }
