@@ -44,7 +44,7 @@ public suspend inline fun <T> suspendTaskCoroutine(
                 }
             }
         )
-        channel.send(block)
+//        channel.trySend(block)
     }
 }
 

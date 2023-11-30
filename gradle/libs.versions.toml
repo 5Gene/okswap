@@ -3,50 +3,52 @@
 [versions]
 accompanistPager = "0.28.0"
 accompanistSwiperefresh = "0.30.1"
-activityKtx = "1.8.0"
+activityKtx = "1.8.1"
 android-compileSdk = "34"
 android-minSdk = "26"
 android-targetSdk = "34"
+coreKtx = "1.12.0"
 hilt = "2.47"
 
 appcompat = "1.6.1"
-cartoon = "2023.04.11"
+cartoon = "2023.06.22"
 collectionKtx = "1.3.0"
 constraintlayout = "2.1.4"
 constraintlayoutCompose = "1.1.0-alpha13"
 cubic = "2023.04.11"
 dynamicanimationKtx = "1.0.0-alpha03"
-kotlin = "1.9.10"
-android-gradle-plugin = "8.1.2"
+kotlin = "1.9.20"
+android-gradle-plugin = "8.1.4"
 ksp = "1.9.10-1.0.13"
 lifecycle = "2.6.2"
 lottie = "3.4.0"
 material = "1.10.0"
-navigationFragmentKtx = "2.7.4"
-navigationUiKtx = "2.7.4"
+navigationFragmentKtx = "2.7.5"
+navigationUiKtx = "2.7.5"
 paging = "3.2.1"
 paletteKtx = "1.0.0"
 spotless = "6.20.0"
 detekt = "1.23.1"
 kode-detekt-rules-compose = "1.3.0"
 twitter-compose-rules = "0.0.26"
-desugar-jdk-libs = "2.0.3"
-recyclerview = "1.3.1"
-swiperefreshlayout = "1.3.1"
+desugar-jdk-libs = "2.0.4"
+recyclerview = "1.3.2"
+swiperefreshlayout = "1.1.0"
 
-androidx-compose-bom = "2023.10.00"
+androidx-compose-bom = "2023.10.01"
 koin-bom = "3.5.1"
-androidx-compose-compiler = "1.5.3"
-androidx-benchmark = "1.1.1"
+okhttp-bom = "4.12.0"
+androidx-compose-compiler = "1.5.5"
+androidx-benchmark = "1.2.1"
 androidx-profileinstaller = "1.3.1"
 androidx-core = "1.12.0"
 androidx-core-splashscreen = "1.0.1"
-androidx-activity = "1.8.0"
+androidx-activity = "1.8.1"
 androidx-annotation = "1.7.0"
-androidx-navigation = "2.7.4"
-androidx-room = "2.5.2"
+androidx-navigation = "2.7.5"
+androidx-room = "2.6.1"
 androidx-datastore = "1.0.0"
-androidx-hilt = "1.0.0"
+androidx-hilt = "1.1.0"
 androidx-test-ext = "1.1.5"
 androidx-test-espresso = "3.5.1"
 androidx-test-uiautomator = "2.2.0"
@@ -57,8 +59,7 @@ kotlinx-coroutines = "1.7.3"
 kotlinx-serialization = "1.5.1"
 kotlinx-datetime = "0.4.0"
 
-dagger = "2.47"
-okhttp = "4.11.0"
+dagger = "2.48"
 retrofit = "2.9.0"
 retrofit-kotlinx-serialization-converter = "1.0.0"
 
@@ -66,11 +67,11 @@ javax-inject = "1"
 
 accompanist = "0.30.1"
 coil = "2.4.0"
-ktor = "2.3.4"
+ktor = "2.3.6"
 viewDsl = "2023.04.05"
 adapter = "2023.10.13"
-webkit = "1.8.0"
-workRuntimeKtx = "2.8.1"
+webkit = "1.9.0"
+workRuntimeKtx = "2.9.0"
 protobuf = "3.24.0"
 protobufPlugin = "0.9.4"
 
@@ -81,8 +82,8 @@ sparkj-cubic = { module = "osp.sparkj.ui:cubic", version.ref = "cubic" }
 sparkj-view-dsl = { module = "osp.sparkj.ui:view-dsl", version.ref = "viewDsl" }
 sparkj-adapter = { module = "osp.sparkj.ui:adapter", version.ref = "adapter" }
 
-androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "recyclerview" }
-androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "swiperefreshlayout" }
+androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-collection-ktx = { module = "androidx.collection:collection-ktx", version.ref = "collectionKtx" }
@@ -189,7 +190,10 @@ dagger-hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "dagg
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
 
-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+# https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp-bom
+okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp-bom" }
+okhttp = { module = "com.squareup.okhttp3:okhttp" }
+okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit-kotlinx-serialization-converter" }
 
@@ -251,10 +255,24 @@ androidx-benchmark = [
     "androidx-test-uiautomator",
     "androidx-benchmark-macro-junit4"
 ]
-retrofit = ["okhttp", "retrofit", "retrofit-kotlinx-serialization-converter"]
+okhttp = ["okhttp-logging", "okhttp", "retrofit", "retrofit-kotlinx-serialization-converter"]
+
+koin = ["koin-android", "koin-android-compat", "koin-androidx-compose", "koin-androidx-workmanager", "koin-compose",
+    "koin-ktor", "koin-core-coroutines", "koin-core"]
+
+ktor = ["ktor-client", "ktor-client-logging"]
+
+android-project = ["androidx-activity-ktx", "androidx-annotation", "androidx-appcompat",
+    "androidx-collection-ktx", "androidx-constraintlayout", "androidx-room-ktx", "androidx-core-ktx",
+    "kotlinx-coroutines-android", "kotlinx-coroutines-core", "kotlinx-serialization-json", "kotlinx-datetime",
+    "google-material", "androidx-swiperefreshlayout", "androidx-recyclerview", "androidx-dynamicanimation-ktx",
+    "androidx-datastore-preferences", "coil-compose"]
 sparkj = ["sparkj-view-dsl", "sparkj-cubic", "sparkj-cartoon"]
 
 [plugins]
+#https://developer.android.com/build/releases/gradle-plugin
+#https://developer.android.com/build/jdks?hl=zh-cn
+# agp 8.1开始最高支持到java 17
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 android-test = { id = "com.android.test", version.ref = "android-gradle-plugin" }
