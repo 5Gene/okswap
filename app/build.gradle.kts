@@ -9,7 +9,6 @@ android {
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "osp.sparkj.okswap"
         minSdk = libs.versions.android.minSdk.get().toInt()
 //        consumerProguardFiles()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -43,13 +42,13 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
 
     kotlinOptions {
         freeCompilerArgs = listOf("-Xcontext-receivers")
-        jvmTarget = "17"
+        jvmTarget = "18"
     }
 
     buildFeatures {
@@ -65,7 +64,7 @@ android {
         //https://developer.android.google.cn/jetpack/androidx/releases/compose-kotlin?hl=zh-cn
         kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
-    namespace = "osp.sparkj.replay"
+    namespace = "osp.sparkj.more"
 }
 
 dependencies {
@@ -75,6 +74,7 @@ dependencies {
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     implementation(libs.bundles.compose)
+    implementation(libs.okhttp)
     implementation(libs.bundles.android.project)
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.bundles.androidx.benchmark)

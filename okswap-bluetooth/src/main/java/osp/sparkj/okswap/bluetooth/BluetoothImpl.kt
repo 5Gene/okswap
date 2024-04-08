@@ -131,7 +131,7 @@ class BrClient(
             addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
             addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
         })
-
+        BluetoothAdapter.STATE_ON
         _bondedDevicesFlow.tryEmit(defaultAdapter.bondedDevices.toList())
     }
 
@@ -280,7 +280,7 @@ class BrServer : AbscBluetoothServer() {
                     val length = bluetoothSocket.inputStream.read(byteArray)
                     val availableBytes = ByteArray(length)
                     System.arraycopy(byteArray, 0, availableBytes, 0, length)
-                    println("read > ${String(availableBytes)}")
+                    println("read > ${java.lang.String(availableBytes)}")
                     println(_readFlow.tryEmit(DeviceBytes(Device(name, address), availableBytes)))
                 }
             } catch (e: Exception) {
