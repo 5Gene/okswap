@@ -1,7 +1,8 @@
 package osp.sparkj.okswap.bluetooth
 
 import android.annotation.SuppressLint
-import android.bluetooth.*
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -18,7 +19,7 @@ import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-internal class BluetoothLifecycleRegistry(val lifecycleOwner: LifecycleOwner) : Lifecycle() {
+internal class BluetoothLifecycleRegistry(private val lifecycleOwner: LifecycleOwner) : Lifecycle() {
 
     val observers = mutableListOf<LifecycleEventObserver>()
     override val currentState: State = State.STARTED
@@ -52,7 +53,7 @@ internal class BluetoothLifecycleRegistry(val lifecycleOwner: LifecycleOwner) : 
 }
 
 @SuppressLint("MissingPermission")
-class BluetoothLifecycleOwner(context: Context, val focusOnDevice: (String) -> Boolean = { _ -> true }) : LifecycleOwner, BroadcastReceiver() {
+class BluetoothLifecycleOwner(context: Context, val filter: (String) -> Boolean = { _ -> true }) : LifecycleOwner, BroadcastReceiver() {
 
     override val lifecycle: Lifecycle
         get() = _lifecycleRegistry
@@ -63,7 +64,12 @@ class BluetoothLifecycleOwner(context: Context, val focusOnDevice: (String) -> B
 
     init {
         if (Build.VERSION.SDK_INT > VERSION_CODES.S) {
-            assert(ContextCompat.checkSelfPermission(context, android.Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+            assert(
+                ContextCompat.checkSelfPermission(
+                    context,
+                    android.Manifest.permission.BLUETOOTH_CONNECT
+                ) == PackageManager.PERMISSION_GRANTED
+            )
         }
         ContextCompat.registerReceiver(context, this, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED).apply {
             //ACTION_CONNECTION_STATE_CHANGED仅当第一个设备连接或最后一个设备断开连接时发送
@@ -115,6 +121,7 @@ class BluetoothLifecycleOwner(context: Context, val focusOnDevice: (String) -> B
 //            }
 
             BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
+//                val device = intent.getBluetoothDevice()
                 _lifecycleRegistry.currentEvent = Lifecycle.Event.ON_PAUSE
             }
 
@@ -125,8 +132,8 @@ class BluetoothLifecycleOwner(context: Context, val focusOnDevice: (String) -> B
     }
 }
 
-
-class BluetoothScope(context: Context, override val coroutineContext: CoroutineContext = SupervisorJob()) : CoroutineScope, LifecycleEventObserver {
+class BluetoothScope(context: Context, override val coroutineContext: CoroutineContext = SupervisorJob()) : CoroutineScope,
+    LifecycleEventObserver {
     init {
         val bluetoothLifecycle = context.bluetoothLifecycleOwner.lifecycle as BluetoothLifecycleRegistry
         if (bluetoothLifecycle.currentEvent == Lifecycle.Event.ON_DESTROY) {
@@ -143,76 +150,6 @@ class BluetoothScope(context: Context, override val coroutineContext: CoroutineC
             coroutineContext.cancel()
         }
     }
-}
-
-
-@SuppressLint("MissingPermission")
-suspend fun Context.boundDevice(address: String) = suspendCancellableCoroutine<Boolean> {
-    val bluetoothDevice = bluetoothAdapter.getRemoteDevice(address)
-    if (bluetoothDevice.isBounded) {
-        it.resume(true)
-        return@suspendCancellableCoroutine
-    }
-    val boundStateReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent) {
-//            val bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java)
-            val bluetoothDevice: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE) ?: return
-            if (bluetoothDevice.address != address) {
-                return
-            }
-            val boundState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR)
-            when (boundState) {
-                BluetoothDevice.BOND_NONE -> {
-                    unregisterReceiver(this)
-                    it.resume(false)
-                }
-
-                BluetoothDevice.BOND_BONDED -> {
-                    unregisterReceiver(this)
-                    it.resume(true)
-                }
-            }
-        }
-    }
-    ContextCompat.registerReceiver(this, boundStateReceiver, IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED), ContextCompat.RECEIVER_EXPORTED)
-    it.invokeOnCancellation {
-        unregisterReceiver(boundStateReceiver)
-    }
-    bluetoothDevice.createBond()
-}
-
-val BluetoothDevice.isConnected: Boolean
-    get() {
-        val mechod = javaClass.getDeclaredMethod("isConnected")
-        return mechod.invoke(this) as Boolean
-    }
-
-val Context.bluetoothAdapter: BluetoothAdapter
-    get() = (getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
-
-
-val BluetoothDevice.isBounded: Boolean
-    @SuppressLint("MissingPermission")
-    get() {
-        return bondState == BluetoothDevice.BOND_BONDED
-    }
-
-
-internal var sBluetoothLifecycleOwner: BluetoothLifecycleOwner? = null
-internal var sBluetoothScope: BluetoothScope? = null
-
-val Context.bluetoothLifecycleOwner: LifecycleOwner
-    get() = sBluetoothLifecycleOwner ?: BluetoothLifecycleOwner(this.applicationContext).also { sBluetoothLifecycleOwner = it }
-
-val Context.bluetoothScope: CoroutineScope
-    get() = sBluetoothScope ?: BluetoothScope(this.applicationContext).also { sBluetoothScope = it }
-
-fun Context.bluetoothLifecycle(block: BluetoothLifecycleOwner.() -> Unit) {
-    (bluetoothLifecycleOwner as BluetoothLifecycleOwner).block()
-}
-
-fun bt_log(vararg msgs: String) {
-    println("${Thread.currentThread().name}: ${msgs.joinToString(", ")}")
 }
 
 //@SuppressLint("MissingPermission")
@@ -257,6 +194,6 @@ fun bt_log(vararg msgs: String) {
 //    }
 //}
 
-fun log_thread(vararg msgs: String) {
+fun bt_log(vararg msgs: String) {
     println("${Thread.currentThread().name}: ${msgs.joinToString(", ")}")
 }
