@@ -39,6 +39,13 @@ android {
         }
     }
 
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        //https://developer.android.google.cn/jetpack/androidx/releases/compose-kotlin?hl=zh-cn
+        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_18
         targetCompatibility = JavaVersion.VERSION_18
@@ -54,6 +61,9 @@ android {
 
 dependencies {
     implementation(project(mapOf("path" to ":okswap")))
+    val composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    implementation(libs.bundles.compose)
     implementation(libs.bundles.android.project)
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.bundles.androidx.benchmark)

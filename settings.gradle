@@ -20,7 +20,7 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = "more"
+rootProject.name = "okswap"
 include ':app'
 include ':okswap'
 include ':okswap-bluetooth'
