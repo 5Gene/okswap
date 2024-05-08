@@ -1,10 +1,8 @@
-import com.android.build.api.dsl.ApplicationExtension
-import com.android.build.api.variant.ApplicationAndroidComponentsExtension
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalog
+import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -15,37 +13,54 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * ```
  */
 
-class ComposeConfig : Plugin<Project> {
+open class ComposeConfig : Plugin<Project> {
+
+    val androidConfigs: MutableList<AndroidExtensionConfig> = mutableListOf(
+        composeConfig()
+    )
+
+    val dependenicesConfigs: MutableList<DependenicesConfig> = mutableListOf(
+        composeDependenices()
+    )
+
+    private fun composeConfig(): AndroidExtension.(Project, VersionCatalog) -> Unit =
+        { project: Project, vlibs: VersionCatalog ->
+            buildFeatures {
+                compose = true
+            }
+            composeOptions {
+                kotlinCompilerExtensionVersion = vlibs.findVersion("androidx-compose-compiler").get().toString()
+            }
+        }
+
+    private fun composeDependenices(): DependencyHandlerScope.(VersionCatalog) -> Unit =
+        { vlibs: VersionCatalog ->
+            val bom = vlibs.findLibrary("androidx-compose-bom").get()
+            add("implementation", platform(bom))
+            add("androidTestImplementation", platform(bom))
+            add("implementation", vlibs.findBundle("compose").get())
+            add("debugImplementation", vlibs.findLibrary("androidx-compose-ui-tooling-preview").get())
+            add("debugImplementation", vlibs.findLibrary("androidx-compose-ui-tooling").get())
+        }
+
     override fun apply(target: Project) {
         with(target) {
-            val extension = extensions.getByType<BaseAppModuleExtension>()
-            println("ComposeConfig 22 =================== ${extensions.getByType<ApplicationExtension>()} ================")
-            println("ComposeConfig 22 =================== ${extensions.getByType<ApplicationAndroidComponentsExtension>()} ================")
-            println("ComposeConfig 22 =================== ${extension} ================")
-            println("ComposeConfig 22 =================== ${extension?.sourceSets?.size} ================")
-            extension.apply {
-                buildFeatures {
-                    compose = true
+            val catalog = vlibs
+            target.android.apply {
+                androidConfigs.forEach {
+                    it(target, catalog)
                 }
-
-                composeOptions {
-                    kotlinCompilerExtensionVersion = vlibs.findVersion("androidx-compose-compiler").get().toString()
-                }
-
-                dependencies {
-                    val bom = vlibs.findLibrary("androidx-compose-bom").get()
-                    add("implementation", platform(bom))
-                    add("androidTestImplementation", platform(bom))
-                    add("implementation", vlibs.findBundle("compose").get())
-                    add("debugImplementation", vlibs.findLibrary("androidx-compose-ui-tooling-preview").get())
-                    add("debugImplementation", vlibs.findLibrary("androidx-compose-ui-tooling").get())
+            }
+            dependencies {
+                dependenicesConfigs.forEach {
+                    it(catalog)
                 }
             }
 
             tasks.withType<KotlinCompile>().configureEach {
                 kotlinOptions {
                     freeCompilerArgs += buildComposeMetricsParameters()
-                    freeCompilerArgs += stabilityConfiguration()
+//                    freeCompilerArgs += stabilityConfiguration()
                     freeCompilerArgs += strongSkippingConfiguration()
                 }
             }

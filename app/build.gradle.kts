@@ -8,7 +8,8 @@ plugins {
 
 
 //apply<ProtobufConfig>()
-//apply<TestConfig>()
+apply<ComposeConfig>()
+apply<TestConfig>()
 
 
 android {
@@ -32,6 +33,11 @@ android {
 //            keyPassword 'jzb1234'
 //        }
 //    }
+
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xcontext-receivers")
+        jvmTarget = "20"
+    }
 
     buildTypes {
         create("MyBuildType") {

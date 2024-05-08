@@ -5,6 +5,7 @@ plugins {
     id("protobuf-conventions")
 }
 
+apply<TestConfig>()
 
 rootProject.ext["GROUP_ID"] = "osp.sparkj.ok"
 rootProject.ext["ARTIFACT_ID"] = "okswap-bluetooth"

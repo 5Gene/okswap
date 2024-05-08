@@ -14,11 +14,31 @@
  *   limitations under the License.
  */
 
+@file:Suppress("UNCHECKED_CAST")
+
+import com.android.build.api.dsl.*
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.plugins.PluginManager
+import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.getByType
 
 val Project.vlibs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
+
+typealias AndroidExtensionConfig = AndroidExtension.(project: Project, vlibs: VersionCatalog) -> Unit
+typealias DependenicesConfig = DependencyHandlerScope.(vlibs: VersionCatalog) -> Unit
+typealias ApplyPluginsConfig = PluginManager.() -> Unit
+
+typealias AndroidExtension = CommonExtension<
+        ApplicationBuildFeatures,
+        ApplicationBuildType,
+        ApplicationDefaultConfig,
+        ApplicationProductFlavor,
+        ApplicationAndroidResources>
+
+val Project.android
+    get(): AndroidExtension = extensions.getByName("android") as AndroidExtension
 
