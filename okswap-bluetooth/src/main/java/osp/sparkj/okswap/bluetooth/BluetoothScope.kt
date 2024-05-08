@@ -62,7 +62,8 @@ internal class BluetoothLifecycleRegistry(private val lifecycleOwner: LifecycleO
 }
 
 @SuppressLint("MissingPermission")
-class BluetoothLifecycleOwner(context: Context, val focusOnDevice: (String) -> Boolean = { _ -> true }) : LifecycleOwner, BroadcastReceiver() {
+class BluetoothLifecycleOwner(context: Context, val focusOnDevice: (String) -> Boolean = { _ -> true }) : LifecycleOwner,
+    BroadcastReceiver() {
 
     override val lifecycle: Lifecycle
         get() = _lifecycleRegistry
@@ -73,7 +74,12 @@ class BluetoothLifecycleOwner(context: Context, val focusOnDevice: (String) -> B
 
     init {
         if (Build.VERSION.SDK_INT > VERSION_CODES.S) {
-            assert(ContextCompat.checkSelfPermission(context, android.Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            assert(
+                ContextCompat.checkSelfPermission(
+                    context,
+                    android.Manifest.permission.BLUETOOTH_CONNECT
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 "require permission: android.permission.BLUETOOTH_CONNECT"
             }
         }
@@ -209,7 +215,7 @@ fun Context.openBt() {
 }
 
 @Composable
-fun BtStateBox(block: @Composable (Boolean, () -> Unit) -> Unit) {
+fun BtStateBox(block: @Composable (Boolean, onClick: () -> Unit) -> Unit) {
     if (isInPreview()) {
         block(true) {
         }

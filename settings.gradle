@@ -20,7 +20,11 @@ dependencyResolutionManagement {
         }
     }
 }
+
 rootProject.name = "okswap"
+
+includeBuild("build-conventions")
+
 include ':app'
 include ':okswap'
 include ':okswap-bluetooth'

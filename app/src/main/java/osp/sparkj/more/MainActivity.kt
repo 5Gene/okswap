@@ -1,40 +1,40 @@
+@file:OptIn(ExperimentalLayoutApi::class)
+
 package osp.sparkj.more
 
-import android.bluetooth.BluetoothAdapter
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.*
-import kotlinx.coroutines.*
-import osp.sparkj.okswap.bluetooth.*
+import com.heytap.health.owconnect.OWClinic
+import com.heytap.health.owconnect.globalContext
+import osp.sparkj.okswap.bluetooth.BtStateBox
 import osp.sparkj.ui.theme.MoreTheme
 
 
 class MainActivity : ComponentActivity() {
 
 
+    @OptIn(ExperimentalLayoutApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+//        val flow: Flow<String>? = null
+//        flow?.collectAsState()
+        globalContext = applicationContext
         requestPermissions(arrayOf(android.Manifest.permission.BLUETOOTH_CONNECT), 0)
-        bluetoothLifecycle {
-            bluetoothScope.launch {  }
-        }
-        bluetoothScope.launch {  }
-        lifecycleScope.launch {  }
+//        bluetoothLifecycle {
+//            bluetoothScope.launch {  }
+//        }
+//        bluetoothScope.launch {  }
+//        lifecycleScope.launch {  }
 
         setContent {
 
@@ -50,12 +50,14 @@ class MainActivity : ComponentActivity() {
                     Column {
                         Greeting("Android")
 
-                        bluetoothState { state, click ->
+                        BtStateBox { state, click ->
                             Spacer(modifier = Modifier.size(20.dp))
                             Button(onClick = click) {
                                 Text(text = state.toString())
                             }
                         }
+
+                        OWClinic()
 
                     }
                 }
@@ -63,24 +65,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @Composable
-    fun bluetoothState(block: @Composable (Boolean, () -> Unit) -> Unit) {
 
-        val open = mutableStateOf(bluetoothAdapter.isEnabled)
-        val openBluetooth = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { _ ->
-            open.value = bluetoothAdapter.isEnabled
-        }
-
-        block(open.value) {
-            openBluetooth.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
-        }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
-    }
 }
+
 
 @Composable
 fun Greeting(name: String) {

@@ -2,7 +2,13 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-parcelize")
+    id("protobuf-conventions")
+//    alias(libs.plugins.protobuf)
 }
+
+
+//apply<ProtobufConfig>()
+//apply<TestConfig>()
 
 
 android {
@@ -21,25 +27,46 @@ android {
 //    signingConfigs {
 //        debug {
 //            storeFile file('android.keystore')
-//            storePassword 'oppo1234'
-//            keyAlias 'ccc'
-//            keyPassword 'oppo1234'
+//            storePassword 'jzb1234'
+//            keyAlias 'spark'
+//            keyPassword 'jzb1234'
 //        }
 //    }
 
-    productFlavors {
-        //https://developer.android.google.cn/studio/build/build-variants
-    }
-
     buildTypes {
-        getByName("debug") {
-            extra["alwaysUpdateBuildId"] = false
+        create("MyBuildType") {
+            //子模块没有配置 MyBuildType 的时候默认用 debug
+            matchingFallbacks.add("debug")
         }
+
         release {
             isMinifyEnabled = false
 //            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),"proguard-rules.pro")
         }
+
+        debug {
+            extra["alwaysUpdateBuildId"] = false
+        }
     }
+
+    //https://developer.android.google.cn/studio/build/build-variants
+    flavorDimensions += "mode"
+    productFlavors {
+        create("demo") {
+            // Assigns this product flavor to the "mode" flavor dimension.
+            dimension = "mode"
+        }
+
+        create("full") {
+            dimension = "mode"
+        }
+    }
+//    sourceSets.forEach {
+//        it.java.srcDirs(protobuf.generatedFilesBaseDir)
+//        println(" source set ${it.name}")
+//    }
+
+//    sourceSets.getByName("main").java.srcDirs(protobuf.generatedFilesBaseDir)
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_18
@@ -53,10 +80,6 @@ android {
 
     buildFeatures {
         viewBinding = true
-    }
-
-
-    buildFeatures {
         compose = true
     }
 
@@ -64,6 +87,16 @@ android {
         //https://developer.android.google.cn/jetpack/androidx/releases/compose-kotlin?hl=zh-cn
         kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
+
+    androidComponents {
+        beforeVariants { variantBuilder ->
+            println("====================================== ${variantBuilder.name}")
+            variantBuilder.productFlavors.forEach { flavor ->
+                println("====================================== $flavor")
+            }
+        }
+    }
+
     namespace = "osp.sparkj.more"
 }
 
@@ -82,4 +115,5 @@ dependencies {
     implementation(libs.bundles.android.project)
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.bundles.androidx.benchmark)
+//    implementation(libs.protobuf.kotlin)
 }

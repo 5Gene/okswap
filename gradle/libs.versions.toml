@@ -3,7 +3,7 @@
 [versions]
 accompanistPager = "0.30.1"
 accompanistSwiperefresh = "0.30.1"
-activityKtx = "1.8.2"
+activityKtx = "1.9.0"
 android-compileSdk = "34"
 android-minSdk = "26"
 android-targetSdk = "34"
@@ -21,7 +21,7 @@ ksp = "1.9.23-1.0.20"
 android-gradle-plugin = "8.2.0"
 lifecycle = "2.7.0"
 lottie = "3.4.4"
-material = "1.11.0"
+material = "1.12.0"
 navigationFragmentKtx = "2.7.7"
 navigationUiKtx = "2.7.7"
 paging = "3.2.1"
@@ -36,19 +36,19 @@ swiperefreshlayout = "1.1.0"
 
 koin-bom = "3.5.1"
 okhttp-bom = "4.12.0"
-androidx-compose-bom = "2024.04.00"
+androidx-compose-bom = "2024.05.00"
 #https://developer.android.google.cn/jetpack/androidx/releases/compose-kotlin
-androidx-compose-compiler = "1.5.11"
-androidx-benchmark = "1.2.3"
+androidx-compose-compiler = "1.5.13"
+androidx-benchmark = "1.2.4"
 androidx-window = "1.2.0"
 androidx-profileinstaller = "1.3.1"
-androidx-core = "1.12.0"
+androidx-core = "1.13.1"
 androidx-core-splashscreen = "1.0.1"
-androidx-activity = "1.8.2"
+androidx-activity = "1.9.0"
 androidx-annotation = "1.7.1"
 androidx-navigation = "2.7.7"
 androidx-room = "2.6.1"
-androidx-datastore = "1.0.0"
+androidx-datastore = "1.1.1"
 androidx-hilt = "1.2.0"
 androidx-test-ext = "1.1.5"
 androidx-test-espresso = "3.5.1"
@@ -78,10 +78,10 @@ ktor = "2.3.7"
 viewDsl = "2023.12.08"
 adapter = "2023.10.13"
 spark = "2023.12.08"
-webkit = "1.10.0"
+webkit = "1.11.0"
 workRuntimeKtx = "2.9.0"
-protobuf = "3.24.0"
-protobufPlugin = "0.9.4"
+protobuf = "4.26.1"
+protobuf-plugin = "0.9.4"
 
 [libraries]
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
@@ -222,8 +222,7 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 kode-detekt-rules-compose = { module = "ru.kode:detekt-rules-compose", version.ref = "kode-detekt-rules-compose" }
 twitter-compose-rules-detekt = { module = "com.twitter.compose.rules:detekt", version.ref = "twitter-compose-rules" }
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk-libs" }
-protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
-protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+protobuf-kotlin = { group = "com.google.protobuf", name = "protobuf-kotlin", version.ref = "protobuf" }
 
 # Dependencies of the included build-logic.
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
@@ -346,4 +345,5 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
-protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+#https://plugins.gradle.org/plugin/com.google.protobuf
+protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
