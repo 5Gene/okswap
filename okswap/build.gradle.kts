@@ -4,6 +4,9 @@ plugins {
     id("protobuf-conventions")
 }
 
+//apply<ProtobufConfig>()
+//apply<TestConfig>()
+//apply<AndroidComposeConfig>()
 
 rootProject.ext["GROUP_ID"] = "osp.sparkj.ok"
 rootProject.ext["ARTIFACT_ID"] = "okswap"

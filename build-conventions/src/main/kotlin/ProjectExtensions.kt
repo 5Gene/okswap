@@ -40,5 +40,5 @@ typealias AndroidExtension = CommonExtension<
         ApplicationAndroidResources>
 
 val Project.android
-    get(): AndroidExtension = extensions.getByName("android") as AndroidExtension
+    get(): AndroidExtension? = extensions.findByName("android") as? AndroidExtension
 

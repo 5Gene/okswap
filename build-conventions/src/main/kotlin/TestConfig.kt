@@ -20,8 +20,8 @@ class TestConfig : Plugin<Project> {
             println("$projectName LibraryAndroidComponentsExtension ======== ${extensions.findByType<LibraryAndroidComponentsExtension>()}")
             println("$projectName BaseAppModuleExtension =================== ${extensions.findByType<BaseAppModuleExtension>()}")
             println("$projectName getByName android ======================== ${extensions.findByName("android")}")
-            println("$projectName getByName android ======================== ${extensions.getByName("android").javaClass}")
-            println("$projectName getByName android ======================== ${android.javaClass}")
+            println("$projectName getByName android ======================== ${extensions.findByName("android")?.javaClass}")
+            println("$projectName getByName android ======================== ${android?.javaClass}")
         }
         println("============================================== end $this ${target.name}".green)
     }

@@ -64,7 +64,7 @@ open class AndroidConfig : Plugin<Project> {
                 pluginConfigs()()
             }
             val catalog = vlibs
-            android.apply {
+            android?.apply {
                 //<editor-fold desc="android project default config">
                 compileSdk = catalog.findVersion("android-compileSdk").get().requiredVersion.toInt()
                 defaultConfig {

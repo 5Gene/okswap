@@ -58,7 +58,7 @@ abstract class AbsAndroidConfig : Plugin<Project> {
                 pluginConfigs()()
             }
             val catalog = vlibs
-            android.apply {
+            android?.apply {
                 androidExtensionConfig()(target, catalog)
             }
             tasks.withType<KotlinCompile>().configureEach {

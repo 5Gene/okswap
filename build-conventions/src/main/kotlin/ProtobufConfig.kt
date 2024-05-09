@@ -35,10 +35,8 @@ class ProtobufConfig : Plugin<Project> {
                     }
                 }
             }
-            extensions.getByName("android").apply {
-                dependencies {
-                    add("implementation", vlibs.findLibrary("protobuf-kotlin").get())
-                }
+            dependencies {
+                add("implementation", vlibs.findLibrary("protobuf-kotlin").get())
             }
 
             println("======================================================================")

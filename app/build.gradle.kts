@@ -10,6 +10,7 @@ plugins {
 //apply<ProtobufConfig>()
 apply<AndroidComposeConfig>()
 apply<TestConfig>()
+apply<TestConfig2>()
 
 
 android {

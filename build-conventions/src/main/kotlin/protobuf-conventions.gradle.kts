@@ -26,7 +26,7 @@ protobuf {
     }
 }
 
-println("================================================= ${vlibs.findVersion("protobuf").get()} =====================")
+println("================================================================== $this >:$name".blue)
 println("protobuf文档: https://protobuf.dev/")
 println("最佳实践: https://protobuf.dev/programming-guides/api/")
 println("   - 不要重复使用标签号码 ")
@@ -36,7 +36,7 @@ println("   - 不要更改字段的类型 ")
 println("   - 不要发送包含很多字段的消息 ")
 println("   - 不要更改字段的默认值 ")
 println("   - 不要更改字段的默认值 ")
-println("======================================================================")
+println("======================================================================".blue)
 
 dependencies {
     add("implementation", vlibs.findLibrary("protobuf-kotlin").get())
