@@ -1,7 +1,7 @@
 plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
-    id("protobuf-conventions")
+    id("spark.build.proto.config")
 }
 
 //apply<ProtobufConfig>()

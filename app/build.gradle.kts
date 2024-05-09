@@ -1,20 +1,18 @@
 plugins {
     id("com.android.application")
-//    id("kotlin-android")
-//    id("kotlin-parcelize")
-    id("protobuf-conventions")
-//    alias(libs.plugins.protobuf)
+    id("proto.config")
 }
 
 
-//apply<ProtobufConfig>()
 apply<AndroidComposeConfig>()
-apply<TestConfig>()
-apply<TestConfig2>()
+//apply<ProtobufConfig>()
+//apply<TestConfig>()
 
 
 android {
     defaultConfig {
+        defineStr("strrr", "xxxxx")
+        defineBool("boooo", false)
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -42,6 +40,7 @@ android {
         }
 
         debug {
+            defineInt("ces", 100)
             extra["alwaysUpdateBuildId"] = false
         }
     }

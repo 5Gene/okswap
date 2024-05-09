@@ -16,7 +16,8 @@
 
 @file:Suppress("UNCHECKED_CAST")
 
-import com.android.build.api.dsl.*
+import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.VariantDimension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -32,13 +33,35 @@ typealias AndroidExtensionConfig = AndroidExtension.(project: Project, vlibs: Ve
 typealias DependenicesConfig = DependencyHandlerScope.(vlibs: VersionCatalog) -> Unit
 typealias ApplyPluginsConfig = PluginManager.() -> Unit
 
-typealias AndroidExtension = CommonExtension<
-        ApplicationBuildFeatures,
-        ApplicationBuildType,
-        ApplicationDefaultConfig,
-        ApplicationProductFlavor,
-        ApplicationAndroidResources>
+//要兼容 application和library 这里的泛型必须 用*全匹配
+typealias AndroidExtension = CommonExtension<*, *, *, *, *>
 
 val Project.android
     get(): AndroidExtension? = extensions.findByName("android") as? AndroidExtension
 
+fun VariantDimension.defineStr(name: String, value: String) {
+    buildConfigField("String", name, "\"$value\"")
+}
+
+fun VariantDimension.defineBool(name: String, value: Boolean) {
+    buildConfigField("boolean", name, value.toString())
+}
+
+fun VariantDimension.defineInt(name: String, value: Int) {
+    buildConfigField("int", name, value.toString())
+}
+
+fun VariantDimension.defineResStr(name: String, value: String) {
+    //使用方式 getResources().getString(R.string.name) 值为value
+    resValue("string", name, value)
+}
+
+fun VariantDimension.defineResInt(name: String, value: String) {
+    //使用方式 getResources().getInteger(R.string.name) 值为value
+    resValue("integer", name, value)
+}
+
+fun VariantDimension.defineResBool(name: String, value: String) {
+    //使用方式 getResources().getBoolean(R.string.name) 值为value
+    resValue("bool", name, value)
+}

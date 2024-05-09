@@ -1,11 +1,12 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-parcelize")
-    id("protobuf-conventions")
+//    id("android.compose")
+    id("spark.build.proto.config")
 }
 
-apply<TestConfig>()
+apply<AndroidComposeConfig>()
+//为啥不能这么引用
+//apply<ProtobufConfig>()
 
 rootProject.ext["GROUP_ID"] = "osp.sparkj.ok"
 rootProject.ext["ARTIFACT_ID"] = "okswap-bluetooth"
@@ -16,16 +17,6 @@ rootProject.ext["VERSION"] = "2023.10.12"
 
 
 android {
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-//        consumerProguardFiles()
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-    }
 
     productFlavors {
         //https://developer.android.google.cn/studio/build/build-variants
@@ -41,32 +32,9 @@ android {
         }
     }
 
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        //https://developer.android.google.cn/jetpack/androidx/releases/compose-kotlin?hl=zh-cn
-        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
-    }
-
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xcontext-receivers")
-        jvmTarget = "18"
-    }
-
     namespace = "osp.sparkj.okswap.bluetooth"
 }
 
 dependencies {
     implementation(project(mapOf("path" to ":okswap")))
-    val composeBom = platform(libs.androidx.compose.bom)
-    implementation(composeBom)
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.android.project)
-    testImplementation(libs.test.junit)
-    androidTestImplementation(libs.bundles.androidx.benchmark)
 }

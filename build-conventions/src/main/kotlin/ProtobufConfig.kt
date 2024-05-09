@@ -1,7 +1,7 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.findByType
 
 /**
  * 插件引入方式
@@ -12,13 +12,13 @@ import org.gradle.kotlin.dsl.getByType
 
 class ProtobufConfig : Plugin<Project> {
     override fun apply(target: Project) {
-        println("========================================= start $this ${target.name}".green)
+        println("=================================================== start $this ${target.name}".green)
         with(target) {
             with(pluginManager) {
                 apply("com.google.protobuf")
             }
-            val pbExtension = extensions.getByType<com.google.protobuf.gradle.ProtobufExtension>()
-            pbExtension.apply {
+            val pbExtension = extensions.findByType<com.google.protobuf.gradle.ProtobufExtension>()
+            pbExtension?.apply {
                 protoc {
                     artifact = "com.google.protobuf:protoc:${vlibs.findVersion("protobuf").get()}"
                 }
@@ -39,7 +39,7 @@ class ProtobufConfig : Plugin<Project> {
                 add("implementation", vlibs.findLibrary("protobuf-kotlin").get())
             }
 
-            println("======================================================================")
+            println("========================================================== $this ${target.name}".blue)
             println("protobuf文档: https://protobuf.dev/")
             println("最佳实践: https://protobuf.dev/programming-guides/api/")
             println("   - 不要重复使用标签号码 ")
@@ -49,7 +49,7 @@ class ProtobufConfig : Plugin<Project> {
             println("   - 不要发送包含很多字段的消息 ")
             println("   - 不要更改字段的默认值 ")
             println("   - 不要更改字段的默认值 ")
-            println("======================================================================")
+            println("================================================================".blue)
         }
         println("============================================== end $this ${target.name}".green)
     }
