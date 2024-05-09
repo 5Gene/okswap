@@ -1,43 +1,76 @@
-import org.gradle.api.JavaVersion
 import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalog
+import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.jetbrains.kotlin.gradle.dsl.KotlinCommonToolOptions
 
-class AndroidComposeConfig : ComposeConfig() {
+class AndroidComposeConfig : AndroidConfig() {
 
-    override fun apply(target: Project) {
-        with(target.pluginManager) {
-            apply("kotlin-android")
-            apply("kotlin-parcelize")
+    override fun androidExtensionConfig(): AndroidExtension.(Project, VersionCatalog) -> Unit {
+        return { _, vlibs ->
+            buildFeatures {
+                compose = true
+            }
+            composeOptions {
+                //https://developer.android.google.cn/jetpack/androidx/releases/compose-kotlin?hl=zh-cn
+                kotlinCompilerExtensionVersion = vlibs.findVersion("androidx-compose-compiler").get().toString()
+            }
         }
-        super.apply(target)
+    }
+
+    override fun dependenciesConfig(): DependencyHandlerScope.(VersionCatalog) -> Unit = { vlibs: VersionCatalog ->
+        val bom = vlibs.findLibrary("androidx-compose-bom").get()
+        add("implementation", platform(bom))
+        add("androidTestImplementation", platform(bom))
+        add("implementation", vlibs.findBundle("compose").get())
+        add("debugImplementation", vlibs.findLibrary("androidx-compose-ui-tooling-preview").get())
+        add("debugImplementation", vlibs.findLibrary("androidx-compose-ui-tooling").get())
+    }
+
+
+    override fun kotlinOptionsConfig(): KotlinCommonToolOptions.(Project) -> Unit = { project ->
+        with(project) {
+            freeCompilerArgs += buildComposeMetricsParameters()
+//                    freeCompilerArgs += stabilityConfiguration()
+            freeCompilerArgs += strongSkippingConfiguration()
+        }
     }
 
 }
 
-/**
- * Configure base Kotlin with Android options
- */
-internal fun Project.configureKotlinAndroid(
-    commonExtension: AndroidExtension,
-) {
-    commonExtension.apply {
-        compileSdk = 34
-
-        defaultConfig {
-            minSdk = 21
-        }
-
-        compileOptions {
-            // Up to Java 11 APIs are available through desugaring
-            // https://developer.android.com/studio/write/java11-minimal-support-table
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
-            isCoreLibraryDesugaringEnabled = true
-        }
+private fun Project.buildComposeMetricsParameters(): List<String> {
+    val metricParameters = mutableListOf<String>()
+    val enableMetricsProvider = project.providers.gradleProperty("enableComposeCompilerMetrics")
+    val relativePath = projectDir.relativeTo(rootDir)
+    val buildDir = layout.buildDirectory.get().asFile
+    val enableMetrics = (enableMetricsProvider.orNull == "true")
+    if (enableMetrics) {
+        val metricsFolder = buildDir.resolve("compose-metrics").resolve(relativePath)
+        metricParameters.add("-P")
+        metricParameters.add(
+            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" + metricsFolder.absolutePath,
+        )
     }
 
-//    configureKotlin()
+    val enableReportsProvider = project.providers.gradleProperty("enableComposeCompilerReports")
+    val enableReports = (enableReportsProvider.orNull == "true")
+    if (enableReports) {
+        val reportsFolder = buildDir.resolve("compose-reports").resolve(relativePath)
+        metricParameters.add("-P")
+        metricParameters.add(
+            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" + reportsFolder.absolutePath
+        )
+    }
 
-//    dependencies {
-//        add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
-//    }
+    return metricParameters.toList()
 }
+
+private fun Project.stabilityConfiguration() = listOf(
+    "-P",
+    "plugin:androidx.compose.compiler.plugins.kotlin:stabilityConfigurationPath=${project.rootDir.absolutePath}/compose_compiler_config.conf",
+)
+
+private fun Project.strongSkippingConfiguration() = listOf(
+    "-P",
+    "plugin:androidx.compose.compiler.plugins.kotlin:experimentalStrongSkipping=true",
+)
+

@@ -7,6 +7,9 @@
 // - 使用 Gradle 的 Groovy DSL - 该插件是一个.gradle文件，并应用id("groovy-gradle-plugin").
 plugins {
     `kotlin-dsl`
+    `kotlin-dsl-precompiled-script-plugins`
+    `java-library`
+    `maven-publish`
 }
 //要应用预编译脚本插件，您需要知道其ID。 ID 源自插件脚本的文件名及其（可选）包声明。
 //例如，该脚本src/main/*/java-library.gradle(.kts)的插件 ID 为java-library（假设它没有包声明）。
@@ -18,11 +21,14 @@ repositories {
 }
 
 
+
+
 dependencies {
     compileOnly("com.android.tools.build:gradle:8.2.0")
     compileOnly("com.android.tools.build:gradle-api:8.2.0")
     compileOnly(gradleApi())
     compileOnly(kotlin("gradle-plugin"))
+    implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
 }
 //https://docs.gradle.org/current/userguide/custom_plugins.html
@@ -33,3 +39,30 @@ println("============================ ${this} ===============")
 
 //println("============================ ${vlibs2.findVersion("protobuf").get()} ===============")
 println("============================ build-conventions ===============")
+
+group = "my"
+version = "1.0"
+
+publishing {
+    repositories {
+        maven(url = "../build/repository")
+    }
+}
+
+gradlePlugin {
+    plugins {
+        register("android-config") {
+            id = "android.config"
+            implementationClass = "AndroidConfig"
+        }
+        register("android-compose") {
+            id = "android.compose"
+            implementationClass = "AndroidComposeConfig"
+        }
+        register("proto-config") {
+            id = "proto.config"
+            implementationClass = "ProtobufConfig"
+        }
+
+    }
+}

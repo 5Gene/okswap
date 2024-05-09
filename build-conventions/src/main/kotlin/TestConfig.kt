@@ -9,18 +9,20 @@ import org.gradle.kotlin.dsl.findByType
 
 class TestConfig : Plugin<Project> {
     override fun apply(target: Project) {
+        println("========================================= start $this ${target.name}".green)
         with(target) {
             val projectName = name
 //            ApplicationAndroidComponentsExtension -> ApplicationExtension
 //            findByType 不存在返回空 getByType 不存在抛异常
-            println("TestConfig $projectName ApplicationExtension =================== ${extensions.findByType<ApplicationExtension>()}")
-            println("TestConfig $projectName LibraryExtension =================== ${extensions.findByType<LibraryExtension>()}")
-            println("TestConfig $projectName ApplicationAndroidComponentsExtension =================== ${extensions.findByType<ApplicationAndroidComponentsExtension>()} ================")
-            println("TestConfig $projectName LibraryAndroidComponentsExtension =================== ${extensions.findByType<LibraryAndroidComponentsExtension>()} ================")
-            println("TestConfig $projectName BaseAppModuleExtension =================== ${extensions.findByType<BaseAppModuleExtension>()} ================")
-            println("TestConfig $projectName getByName android =================== ${extensions.findByName("android")} ================")
-            println("TestConfig $projectName getByName android =================== ${extensions.getByName("android").javaClass}")
-            println("TestConfig $projectName getByName android ========= ${android.javaClass}")
+            println("$projectName ApplicationExtension ===================== ${extensions.findByType<ApplicationExtension>()}")
+            println("$projectName LibraryExtension ========================= ${extensions.findByType<LibraryExtension>()}")
+            println("$projectName ApplicationAndroidComponentsExtension ==== ${extensions.findByType<ApplicationAndroidComponentsExtension>()}")
+            println("$projectName LibraryAndroidComponentsExtension ======== ${extensions.findByType<LibraryAndroidComponentsExtension>()}")
+            println("$projectName BaseAppModuleExtension =================== ${extensions.findByType<BaseAppModuleExtension>()}")
+            println("$projectName getByName android ======================== ${extensions.findByName("android")}")
+            println("$projectName getByName android ======================== ${extensions.getByName("android").javaClass}")
+            println("$projectName getByName android ======================== ${android.javaClass}")
         }
+        println("============================================== end $this ${target.name}".green)
     }
 }

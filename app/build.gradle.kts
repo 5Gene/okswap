@@ -1,24 +1,19 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-parcelize")
+//    id("kotlin-android")
+//    id("kotlin-parcelize")
     id("protobuf-conventions")
 //    alias(libs.plugins.protobuf)
 }
 
 
 //apply<ProtobufConfig>()
-apply<ComposeConfig>()
+apply<AndroidComposeConfig>()
 apply<TestConfig>()
 
 
 android {
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-//        consumerProguardFiles()
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -33,11 +28,6 @@ android {
 //            keyPassword 'jzb1234'
 //        }
 //    }
-
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xcontext-receivers")
-        jvmTarget = "20"
-    }
 
     buildTypes {
         create("MyBuildType") {
@@ -79,19 +69,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_18
     }
 
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xcontext-receivers")
-        jvmTarget = "18"
-    }
-
     buildFeatures {
         viewBinding = true
-        compose = true
-    }
-
-    composeOptions {
-        //https://developer.android.google.cn/jetpack/androidx/releases/compose-kotlin?hl=zh-cn
-        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
 
     androidComponents {
@@ -110,16 +89,4 @@ dependencies {
     implementation(project(mapOf("path" to ":okswap-ipc")))
     implementation(project(mapOf("path" to ":okswap")))
     implementation(project(mapOf("path" to ":okswap-bluetooth")))
-    val composeBom = platform(libs.androidx.compose.bom)
-    implementation(composeBom)
-    implementation(libs.bundles.compose)
-    androidTestImplementation(composeBom)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation(libs.okhttp)
-    implementation(libs.bundles.android.project)
-    testImplementation(libs.test.junit)
-    androidTestImplementation(libs.bundles.androidx.benchmark)
-//    implementation(libs.protobuf.kotlin)
 }
