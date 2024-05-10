@@ -68,27 +68,28 @@ tasks.create("before publishPlugins") {
 
 }
 
+
 gradlePlugin {
     website = "https://github.com/5hmlA/jspark"
     vcsUrl = "https://github.com/5hmlA/jspark.git"
     plugins {
 //        findByName()
         register("android-config") {
-            id = "spark.build.android.config"
+            id = "${group}.android.config"
             displayName = "android config plugin"
             description = "android config plugin"
             tags = listOf("config", "android", "convention")
             implementationClass = "AndroidConfig"
         }
         register("android-compose") {
-            id = "spark.build.android.compose"
+            id = "${group}.android.compose"
             displayName = "android compose config plugin"
             description = "android compose config plugin"
             tags = listOf("compose", "config", "android", "convention")
             implementationClass = "AndroidComposeConfig"
         }
         register("proto-config") {
-            id = "spark.build.proto.config"
+            id = "${group}.proto.config"
             displayName = "protobuf config plugin"
             description = "protobuf config plugin"
             tags = listOf("protobuf", "config", "convention")
