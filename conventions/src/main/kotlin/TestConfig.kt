@@ -9,8 +9,8 @@ import org.gradle.kotlin.dsl.findByType
 
 class TestConfig : Plugin<Project> {
     override fun apply(target: Project) {
-        println("========================================= start $this ${target.name}".green)
         with(target) {
+            log("=========================== START【${this@TestConfig}】 =========================")
             val projectName = name
 //            ApplicationAndroidComponentsExtension -> ApplicationExtension
 //            findByType 不存在返回空 getByType 不存在抛异常
@@ -22,7 +22,7 @@ class TestConfig : Plugin<Project> {
             println("$projectName getByName android ======================== ${extensions.findByName("android")}")
             println("$projectName getByName android ======================== ${extensions.findByName("android")?.javaClass}")
             println("$projectName getByName android ======================== ${android?.javaClass}")
+            log("=========================== END【${this@TestConfig}】 =========================")
         }
-        println("============================================== end $this ${target.name}".green)
     }
 }

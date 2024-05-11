@@ -1,4 +1,3 @@
-
 plugins {
     `kotlin-dsl`
     `kotlin-dsl-precompiled-script-plugins`
@@ -24,7 +23,7 @@ repositories {
 
 
 dependencies {
-    //include build中拿不到项目的properties，这里通过System.property取
+    //includeBuild()中拿不到项目的properties，这里通过System.property取
     val agp = sysprop("dep.agp.ver", "8.2.0")
     val kagp = sysprop("dep.kagp.ver", "1.9.24")
     val pgp = sysprop("dep.pgp.ver", "0.9.4")
@@ -39,7 +38,6 @@ dependencies {
     compileOnly(kotlin(module = "gradle-plugin", version = kagp))
     implementation("com.google.protobuf:protobuf-gradle-plugin:$pgp")
 }
-//https://docs.gradle.org/current/userguide/custom_plugins.html
 
 
 "======== class = ${this.javaClass.superclass}".print()
@@ -47,7 +45,7 @@ dependencies {
 "======== rootProject= $rootProject".print()
 
 group = "spark.build"
-version = "1.2"
+version = "1.3"
 
 publishing {
     repositories {

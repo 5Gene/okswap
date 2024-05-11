@@ -23,7 +23,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "okswap"
 
-includeBuild("spark-build")
+includeBuild("conventions")
 
 include ':app'
 include ':okswap'

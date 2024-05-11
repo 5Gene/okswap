@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 abstract class AbsAndroidConfig : Plugin<Project> {
 
-
     /**
      * ```kotlin
      *     override fun pluginConfigs(): PluginManager.() -> Unit = {
@@ -50,10 +49,9 @@ abstract class AbsAndroidConfig : Plugin<Project> {
      */
     abstract fun dependenciesConfig(): DependencyHandlerScope.(VersionCatalog) -> Unit
 
-
     override fun apply(target: Project) {
-        println("========================================= start $this ${target.name}".red)
         with(target) {
+            log("=========================== START【${this@AbsAndroidConfig}】 =========================")
             with(pluginManager) {
                 pluginConfigs()()
             }
@@ -69,7 +67,7 @@ abstract class AbsAndroidConfig : Plugin<Project> {
             dependencies {
                 dependenciesConfig()(catalog)
             }
+            log("=========================== END【${this@AbsAndroidConfig}】 =========================")
         }
-        println("============================================== end $this ${target.name}".red)
     }
 }

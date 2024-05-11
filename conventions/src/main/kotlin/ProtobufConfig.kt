@@ -12,8 +12,8 @@ import org.gradle.kotlin.dsl.findByType
 
 class ProtobufConfig : Plugin<Project> {
     override fun apply(target: Project) {
-        println("=================================================== start $this ${target.name}".green)
         with(target) {
+            log("=========================== START【${this@ProtobufConfig}】 =========================")
             with(pluginManager) {
                 apply("com.google.protobuf")
             }
@@ -39,7 +39,6 @@ class ProtobufConfig : Plugin<Project> {
                 add("implementation", vlibs.findLibrary("protobuf-kotlin").get())
             }
 
-            println("========================================================== $this ${target.name}".blue)
             println("protobuf文档: https://protobuf.dev/")
             println("最佳实践: https://protobuf.dev/programming-guides/api/")
             println("   - 不要重复使用标签号码 ")
@@ -49,8 +48,7 @@ class ProtobufConfig : Plugin<Project> {
             println("   - 不要发送包含很多字段的消息 ")
             println("   - 不要更改字段的默认值 ")
             println("   - 不要更改字段的默认值 ")
-            println("================================================================".blue)
+            log("=========================== START【${this@ProtobufConfig}】 =========================")
         }
-        println("============================================== end $this ${target.name}".green)
     }
 }

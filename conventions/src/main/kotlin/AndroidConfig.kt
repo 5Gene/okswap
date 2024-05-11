@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 open class AndroidConfig : Plugin<Project> {
 
-
     /**
      * ```kotlin
      *     override fun pluginConfigs(): PluginManager.() -> Unit = {
@@ -37,7 +36,6 @@ open class AndroidConfig : Plugin<Project> {
      */
     open fun androidExtensionConfig(): AndroidExtension.(Project, VersionCatalog) -> Unit = { _, _ -> }
 
-
     open fun kotlinOptionsConfig(): KotlinCommonToolOptions.(Project) -> Unit = {}
 
     /**
@@ -51,10 +49,9 @@ open class AndroidConfig : Plugin<Project> {
      */
     open fun dependenciesConfig(): DependencyHandlerScope.(VersionCatalog) -> Unit = { _ -> }
 
-
     override fun apply(target: Project) {
-        println("========================================= start $this ${target.name}".red)
         with(target) {
+            log("=========================== START【${this@AndroidConfig}】 =========================")
             with(pluginManager) {
                 //<editor-fold desc="android project default plugin">
                 apply("kotlin-android")
@@ -97,22 +94,25 @@ open class AndroidConfig : Plugin<Project> {
             }
             dependencies {
                 //<editor-fold desc="android project default dependencies">
-//                koin-bom
                 val koin_bom = vlibs.findLibrary("koin-bom").get()
                 add("implementation", platform(koin_bom))
-                add("implementation", vlibs.findBundle("ktor").get())
+                add("implementation", vlibs.findBundle("koin").get())
+
                 val okhttp_bom = vlibs.findLibrary("okhttp-bom").get()
                 add("implementation", platform(okhttp_bom))
                 add("implementation", vlibs.findBundle("okhttp").get())
-                add("implementation", vlibs.findBundle("koin").get())
+
                 add("implementation", vlibs.findBundle("android-project").get())
                 add("implementation", vlibs.findBundle("sparkj").get())
+                add("implementation", vlibs.findBundle("ktor").get())
+
                 add("testImplementation", vlibs.findLibrary("test-junit").get())
+                add("debugImplementation", vlibs.findLibrary("androidx-compose-ui-test-manifest").get())
                 add("androidTestImplementation", vlibs.findBundle("androidx-benchmark").get())
                 //</editor-fold>
                 dependenciesConfig()(catalog)
             }
+            log("=========================== END【${this@AndroidConfig}】 =========================")
         }
-        println("============================================== end $this ${target.name}".red)
     }
 }
