@@ -23,6 +23,7 @@ repositories {
 dependencies {
     compileOnly("com.android.tools.build:gradle:8.2.0")
     compileOnly("com.android.tools.build:gradle-api:8.2.0")
+    compileOnly("com.gradle.publish:plugin-publish-plugin:1.2.1")
     compileOnly(gradleApi())
     compileOnly(kotlin("gradle-plugin"))
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
@@ -62,12 +63,23 @@ System.setProperty("gradle.publish.skip.namespace.check", "true")
 tasks.create("before publishPlugins") {
     doFirst {
         val ss = System.getProperty("gradle.publish.skip.namespace.check", "false")
-        println("===========================xxxxxxxxxxxxxxx=========== $ss")
+        println("===========================xxxxxxxxxxxxxxx=========== $ss ${project.name}")
+//        这个task在执行publishPlugins这个task之前执行，此时无法获取到下面的extension
+//        val plugins = extensions.getByType<GradlePluginDevelopmentExtension>().plugins
+//        plugins.forEach {
+//            println("- plugin -- ${it.name} ${it.id} ${it.displayName}")
+//        }
     }
     tasks.findByName("publishPlugins")?.dependsOn(this)
-
 }
 
+//tasks.findByName("publishPlugins")?.doFirst {
+//    不太明白为什么这里也报错 Extension of type 'GradlePluginDevelopmentExtension' does not exist
+//    val plugins = extensions.getByType<GradlePluginDevelopmentExtension>().plugins
+//    plugins.forEach {
+//        println("- plugin -- ${it.name} ${it.id} ${it.displayName}")
+//    }
+//}
 
 gradlePlugin {
     website = "https://github.com/5hmlA/jspark"
@@ -95,7 +107,10 @@ gradlePlugin {
             tags = listOf("protobuf", "config", "convention")
             implementationClass = "ProtobufConfig"
         }
-//        register("proto-convention") {
+
+//        因为xxx.gradle.kts注册插件的时候不会设置displayName 尝试这里覆盖注册，结果无效，
+//        publishTask里会检测所有的plugin,被认为是重复注册了直接报错
+//        create("proto-convention") {
 //            id = "protobuf.conventions"
 //            displayName = "protobuf config plugin"
 //            description = "protobuf config plugin"
@@ -103,5 +118,18 @@ gradlePlugin {
 //            implementationClass = "Protobuf_conventionsPlugin"
 //        }
 
+    }
+    //因为通过 xxx.gradle.kts创建的预编译脚本 会自动创建plugin但是没设置displayName和description
+    //所以这里判断补充必要数据否则发布不了，执行 [plugin portal -> publishPlugins]的时候会报错
+    val plugins = extensions.getByType<GradlePluginDevelopmentExtension>().plugins
+    plugins.forEach {
+        if (it.displayName.isNullOrEmpty()) {
+            it.displayName = "protobuf config plugin"
+            it.description = "protobuf config plugin"
+            it.tags = listOf("protobuf", "config", "convention")
+        }
+    }
+    plugins.forEach {
+        println("- plugin -- ${it.name} ${it.id} ${it.displayName}")
     }
 }
