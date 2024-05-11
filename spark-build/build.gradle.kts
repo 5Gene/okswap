@@ -138,4 +138,6 @@ gradlePlugin {
     plugins.forEach {
         "- plugin -- ${it.name} ${it.id} ${it.displayName}".print()
     }
+    "插件地址: https://plugins.gradle.org/u/ZuYun".print()
+    "插件下载地址: https://plugins.gradle.org/m2/".print()
 }
