@@ -1,13 +1,13 @@
 plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
-    id("spark.build.proto.config")
+//    id("protobuf-convention")
+    id("spark.build.protobuf")
 }
 
 //apply<ProtobufConfig>()
 //apply<TestConfig>()
 //apply<AndroidComposeConfig>()
-
 rootProject.ext["GROUP_ID"] = "osp.sparkj.ok"
 rootProject.ext["ARTIFACT_ID"] = "okswap"
 rootProject.ext["VERSION"] = "2023.10.12"

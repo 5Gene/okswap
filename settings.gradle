@@ -1,5 +1,4 @@
 pluginManagement {
-    includeBuild("build-conventions")
     repositories {
         gradlePluginPortal()
         google()
@@ -24,8 +23,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "okswap"
 
+includeBuild("spark-build")
 
-//include ':app'
-//include ':okswap'
-//include ':okswap-bluetooth'
-//include ':okswap-ipc'
+include ':app'
+include ':okswap'
+include ':okswap-bluetooth'
+include ':okswap-ipc'

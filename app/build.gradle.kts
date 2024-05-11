@@ -1,10 +1,11 @@
 plugins {
     id("com.android.application")
-    id("proto.config")
+    id("spark.build.android.compose")
+    id("spark.build.protobuf")
 }
 
 
-apply<AndroidComposeConfig>()
+//apply<AndroidComposeConfig>()
 //apply<ProtobufConfig>()
 //apply<TestConfig>()
 

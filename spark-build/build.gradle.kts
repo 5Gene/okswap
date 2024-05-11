@@ -1,10 +1,4 @@
-//https://docs.gradle.org/current/userguide/custom_plugins.html
-//预编译脚本插件
-//预编译脚本插件在执行之前会被编译成类文件并打包成 JAR。这些插件使用 Groovy 或 Kotlin DSL，
-// 而不是纯 Java、Kotlin 或 Groovy。它们最好用作跨项目共享构建逻辑的约定插件，或者作为整齐组织构建逻辑的一种方式。
-//要创建预编译脚本插件，您可以：
-// - 使用 Gradle 的 Kotlin DSL - 插件是一个.gradle.kts文件，并应用id("kotlin-dsl").
-// - 使用 Gradle 的 Groovy DSL - 该插件是一个.gradle文件，并应用id("groovy-gradle-plugin").
+
 plugins {
     `kotlin-dsl`
     `kotlin-dsl-precompiled-script-plugins`
@@ -12,33 +6,48 @@ plugins {
     `maven-publish`
     id("com.gradle.plugin-publish") version "1.2.1"
 }
-//要应用预编译脚本插件，您需要知道其ID。 ID 源自插件脚本的文件名及其（可选）包声明。
-//例如，该脚本src/main/*/java-library.gradle(.kts)的插件 ID 为java-library（假设它没有包声明）。
-//同样，只要它的包声明为 ，src/main/*/my/java-library.gradle(.kts)就有一个插件 ID 。my.java-librarymy
+
+fun String.print() {
+    println("\u001B[93m✨ $name >> ${this}\u001B[0m")
+}
+
+fun sysprop(name: String, def: String): String {
+//    getProperties中所谓的"system properties"其实是指"java system"，而非"operation system"，概念完全不同，使用getProperties获得的其实是虚拟机的变量形如： -Djavaxxxx。
+//    getenv(): 访问某个系统的环境变量(operation system properties)
+    return System.getProperty(name, def)
+}
+
 repositories {
     gradlePluginPortal()
     google()
 }
 
+
 dependencies {
-    compileOnly("com.android.tools.build:gradle:8.2.0")
-    compileOnly("com.android.tools.build:gradle-api:8.2.0")
+    //include build中拿不到项目的properties，这里通过System.property取
+    val agp = sysprop("dep.agp.ver", "8.2.0")
+    val kagp = sysprop("dep.kagp.ver", "1.9.24")
+    val pgp = sysprop("dep.pgp.ver", "0.9.4")
+    compileOnly("com.android.tools.build:gradle:$agp")
+    compileOnly("com.android.tools.build:gradle-api:$agp")
     compileOnly("com.gradle.publish:plugin-publish-plugin:1.2.1")
     compileOnly(gradleApi())
-    compileOnly(kotlin("gradle-plugin"))
-    implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
+//    https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-gradle-plugin
+//    https://plugins.gradle.org/plugin/org.jetbrains.kotlin.android
+//    https://github.com/JetBrains/kotlin/
+//    kotlin("gradle-plugin", "1.9.24") == org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24
+    compileOnly(kotlin(module = "gradle-plugin", version = kagp))
+    implementation("com.google.protobuf:protobuf-gradle-plugin:$pgp")
 }
 //https://docs.gradle.org/current/userguide/custom_plugins.html
 
 
-println("============================ ${this} ===============")
-//val vlibs2:VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
-
-//println("============================ ${vlibs2.findVersion("protobuf").get()} ===============")
-println("============================ build-conventions ===============")
+"======== class = ${this.javaClass.superclass}".print()
+"======== superclass= ${this.javaClass.superclass}".print()
+"======== rootProject= $rootProject".print()
 
 group = "spark.build"
-version = "1.0"
+version = "1.2"
 
 publishing {
     repositories {
@@ -50,7 +59,6 @@ publishing {
                 password = System.getenv("GITHUB_TOKEN")
             }
         }
-//        maven(url = "../build/repository")
         maven {
             //name会成为任务名字的一部分 publishOspPublicationTo [LocalTest] Repository
             name = "LocalTest"
@@ -59,11 +67,9 @@ publishing {
     }
 }
 
-System.setProperty("gradle.publish.skip.namespace.check", "true")
 tasks.create("before publishPlugins") {
     doFirst {
-        val ss = System.getProperty("gradle.publish.skip.namespace.check", "false")
-        println("===========================xxxxxxxxxxxxxxx=========== $ss ${project.name}")
+        " >> do First before publishPlugins".print()
 //        这个task在执行publishPlugins这个task之前执行，此时无法获取到下面的extension
 //        val plugins = extensions.getByType<GradlePluginDevelopmentExtension>().plugins
 //        plugins.forEach {
@@ -85,9 +91,8 @@ gradlePlugin {
     website = "https://github.com/5hmlA/jspark"
     vcsUrl = "https://github.com/5hmlA/jspark.git"
     plugins {
-//        findByName()
         register("android-config") {
-            id = "${group}.android.config"
+            id = "${group}.android"
             displayName = "android config plugin"
             description = "android config plugin"
             tags = listOf("config", "android", "convention")
@@ -100,8 +105,8 @@ gradlePlugin {
             tags = listOf("compose", "config", "android", "convention")
             implementationClass = "AndroidComposeConfig"
         }
-        register("proto-config") {
-            id = "${group}.proto.config"
+        register("protobuf-config") {
+            id = "${group}.protobuf"
             displayName = "protobuf config plugin"
             description = "protobuf config plugin"
             tags = listOf("protobuf", "config", "convention")
@@ -124,12 +129,13 @@ gradlePlugin {
     val plugins = extensions.getByType<GradlePluginDevelopmentExtension>().plugins
     plugins.forEach {
         if (it.displayName.isNullOrEmpty()) {
-            it.displayName = "protobuf config plugin"
-            it.description = "protobuf config plugin"
+            it.id = "$group.${it.id}"
+            it.displayName = "protobuf convention plugin"
+            it.description = "protobuf convention plugin"
             it.tags = listOf("protobuf", "config", "convention")
         }
     }
     plugins.forEach {
-        println("- plugin -- ${it.name} ${it.id} ${it.displayName}")
+        "- plugin -- ${it.name} ${it.id} ${it.displayName}".print()
     }
 }

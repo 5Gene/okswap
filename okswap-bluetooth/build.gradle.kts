@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
-//    id("android.compose")
-    id("spark.build.proto.config")
+    id("spark.build.android.compose")
+    id("spark.build.protobuf")
 }
 
 apply<AndroidComposeConfig>()

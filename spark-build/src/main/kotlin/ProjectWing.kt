@@ -21,17 +21,15 @@ import com.android.build.api.dsl.VariantDimension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
-import org.gradle.api.plugins.PluginManager
-import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.getByType
 
 val Project.vlibs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-
-typealias AndroidExtensionConfig = AndroidExtension.(project: Project, vlibs: VersionCatalog) -> Unit
-typealias DependenicesConfig = DependencyHandlerScope.(vlibs: VersionCatalog) -> Unit
-typealias ApplyPluginsConfig = PluginManager.() -> Unit
+fun Project.log(msg: String) {
+//    println("\uD83C\uDF89 \uD83D\uDCE3 \uD83C\uDF97\uFE0F $name >>> $msg".yellow)
+    println("\uD83C\uDF97\uFE0F $name >>> $msg".yellow)
+}
 
 //要兼容 application和library 这里的泛型必须 用*全匹配
 typealias AndroidExtension = CommonExtension<*, *, *, *, *>
