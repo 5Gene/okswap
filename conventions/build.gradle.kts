@@ -1,3 +1,6 @@
+//
+//println("-----------${ConfigValidator()}")
+
 plugins {
     `kotlin-dsl`
     `kotlin-dsl-precompiled-script-plugins`
@@ -27,7 +30,7 @@ dependencies {
     val agp = sysprop("dep.agp.ver", "8.2.0")
     val kagp = sysprop("dep.kagp.ver", "1.9.24")
     val pgp = sysprop("dep.pgp.ver", "0.9.4")
-    compileOnly("com.android.tools.build:gradle:$agp")
+//    compileOnly("com.android.tools.build:gradle:$agp")
     compileOnly("com.android.tools.build:gradle-api:$agp")
     compileOnly("com.gradle.publish:plugin-publish-plugin:1.2.1")
     compileOnly(gradleApi())
@@ -47,6 +50,8 @@ dependencies {
 group = "spark.build"
 version = "1.3"
 
+//学习如何使用 agp api
+// https://github.com/android/gradle-recipes/tree/agp-8.4
 publishing {
     repositories {
         maven {
@@ -77,17 +82,17 @@ tasks.create("before publishPlugins") {
     tasks.findByName("publishPlugins")?.dependsOn(this)
 }
 
-//tasks.findByName("publishPlugins")?.doFirst {
-//    不太明白为什么这里也报错 Extension of type 'GradlePluginDevelopmentExtension' does not exist
-//    val plugins = extensions.getByType<GradlePluginDevelopmentExtension>().plugins
-//    plugins.forEach {
-//        println("- plugin -- ${it.name} ${it.id} ${it.displayName}")
-//    }
-//}
+tasks.findByName("publishPlugins")?.doFirst {
+    //不太明白为什么这里也报错 Extension of type 'GradlePluginDevelopmentExtension' does not exist
+    val plugins = extensions.getByType<GradlePluginDevelopmentExtension>().plugins
+    plugins.forEach {
+        println("- plugin -- ${it.name} ${it.id} ${it.displayName}")
+    }
+}
 
 gradlePlugin {
     website = "https://github.com/5hmlA/jspark"
-    vcsUrl = "https://github.com/5hmlA/jspark.git"
+    vcsUrl = "https://github.com/5hmlA/jspark"
     plugins {
         register("android-config") {
             id = "${group}.android"
@@ -125,14 +130,14 @@ gradlePlugin {
     //因为通过 xxx.gradle.kts创建的预编译脚本 会自动创建plugin但是没设置displayName和description
     //所以这里判断补充必要数据否则发布不了，执行 [plugin portal -> publishPlugins]的时候会报错
     val plugins = extensions.getByType<GradlePluginDevelopmentExtension>().plugins
-    plugins.forEach {
-        if (it.displayName.isNullOrEmpty()) {
-            it.id = "$group.${it.id}"
-            it.displayName = "protobuf convention plugin"
-            it.description = "protobuf convention plugin"
-            it.tags = listOf("protobuf", "config", "convention")
-        }
-    }
+//    plugins.forEach {
+//        if (it.displayName.isNullOrEmpty()) {
+//            it.id = "$group.${it.id}"
+//            it.displayName = "protobuf convention plugin"
+//            it.description = "protobuf convention plugin"
+//            it.tags = listOf("protobuf", "config", "convention")
+//        }
+//    }
     plugins.forEach {
         "- plugin -- ${it.name} ${it.id} ${it.displayName}".print()
     }

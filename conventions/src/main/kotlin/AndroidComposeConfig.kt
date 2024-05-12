@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinCommonToolOptions
 
 class AndroidComposeConfig : AndroidConfig() {
 
-    override fun androidExtensionConfig(): AndroidExtension.(Project, VersionCatalog) -> Unit {
+    override fun androidExtensionConfig(): AndroidCommonExtension.(Project, VersionCatalog) -> Unit {
         return { _, vlibs ->
             buildFeatures {
                 compose = true

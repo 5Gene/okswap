@@ -7,11 +7,12 @@ plugins {
 
 //apply<AndroidComposeConfig>()
 //apply<ProtobufConfig>()
-//apply<TestConfig>()
+apply<TestConfig>()
 
 
 android {
     defaultConfig {
+        changeAPkName("newNaame")
         defineStr("strrr", "xxxxx")
         defineBool("boooo", false)
         vectorDrawables {
@@ -75,12 +76,12 @@ android {
     }
 
     androidComponents {
-        beforeVariants { variantBuilder ->
-            println("====================================== ${variantBuilder.name}")
-            variantBuilder.productFlavors.forEach { flavor ->
-                println("====================================== $flavor")
-            }
-        }
+//        beforeVariants { variantBuilder ->
+//            println("====================================== ${variantBuilder.name}")
+//            variantBuilder.productFlavors.forEach { flavor ->
+//                println("====================================== $flavor")
+//            }
+//        }
     }
 
     namespace = "osp.sparkj.more"

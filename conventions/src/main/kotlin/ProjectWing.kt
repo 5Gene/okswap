@@ -18,6 +18,7 @@
 
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.VariantDimension
+import com.android.build.api.variant.AndroidComponentsExtension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -32,10 +33,19 @@ fun Project.log(msg: String) {
 }
 
 //要兼容 application和library 这里的泛型必须 用*全匹配
-typealias AndroidExtension = CommonExtension<*, *, *, *, *>
+typealias AndroidCommonExtension = CommonExtension<*, *, *, *, *>
 
-val Project.android
-    get(): AndroidExtension? = extensions.findByName("android") as? AndroidExtension
+//要兼容 application和library 这里的泛型必须 用*全匹配
+typealias AndroidComponentsExtensions = AndroidComponentsExtension<*, *, *>
+
+/**
+ * @deprecated Use {@code androidComponents} instead
+ */
+val Project.androidExtension
+    get(): AndroidCommonExtension? = extensions.findByName("android") as? AndroidCommonExtension
+
+val Project.androidComponents
+    get(): AndroidComponentsExtensions? = extensions.findByName("androidComponents") as? AndroidComponentsExtensions
 
 fun VariantDimension.defineStr(name: String, value: String) {
     buildConfigField("String", name, "\"$value\"")
@@ -62,4 +72,12 @@ fun VariantDimension.defineResInt(name: String, value: String) {
 fun VariantDimension.defineResBool(name: String, value: String) {
     //使用方式 getResources().getBoolean(R.string.name) 值为value
     resValue("bool", name, value)
+}
+
+fun Project.changeAPkName(name: String) {
+    setProperty("archivesBaseName", name)
+}
+
+fun Collection<*>.toStr(): String {
+    return toTypedArray().contentToString()
 }

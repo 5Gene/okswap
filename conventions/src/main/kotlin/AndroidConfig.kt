@@ -2,9 +2,11 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
+import org.gradle.api.internal.artifacts.repositories.DefaultMavenArtifactRepository
 import org.gradle.api.plugins.PluginManager
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.repositories
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonToolOptions
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -34,7 +36,7 @@ open class AndroidConfig : Plugin<Project> {
      *     }
      * ```
      */
-    open fun androidExtensionConfig(): AndroidExtension.(Project, VersionCatalog) -> Unit = { _, _ -> }
+    open fun androidExtensionConfig(): AndroidCommonExtension.(Project, VersionCatalog) -> Unit = { _, _ -> }
 
     open fun kotlinOptionsConfig(): KotlinCommonToolOptions.(Project) -> Unit = {}
 
@@ -52,6 +54,33 @@ open class AndroidConfig : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             log("=========================== START【${this@AndroidConfig}】 =========================")
+            log("常见构建自定义的即用配方，展示如何使用Android Gradle插件的公共API和DSL:")
+            log("https://github.com/android/gradle-recipes")
+            log("========= Project.layout ${layout.buildDirectory.javaClass} ${layout.buildDirectory.asFile.get().absolutePath}")
+//            log("========= Project.buildDir ${buildDir} =========================")
+
+            repositories.forEach {
+                log("> repositories ${it.name} > ${it.javaClass} =========================")
+            }
+
+            try {
+                repositories {
+                    maven {
+                        url = uri("https://maven.pkg.github.com/5hmlA/sparkj")
+                        credentials {
+                            // https://www.sojson.com/ascii.html
+                            username = "\\u005a\\u0075\\u0059\\u0075\\u006e"
+                            password = "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"
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                println(e.message?.red)
+            }
+            repositories.forEach {
+                log("> repositories ${it.name} > ${(it as DefaultMavenArtifactRepository).url} =========================")
+            }
+
             with(pluginManager) {
                 //<editor-fold desc="android project default plugin">
                 apply("kotlin-android")
@@ -61,7 +90,7 @@ open class AndroidConfig : Plugin<Project> {
                 pluginConfigs()()
             }
             val catalog = vlibs
-            android?.apply {
+            androidExtension?.apply {
                 //<editor-fold desc="android project default config">
                 compileSdk = catalog.findVersion("android-compileSdk").get().requiredVersion.toInt()
                 defaultConfig {
@@ -83,6 +112,8 @@ open class AndroidConfig : Plugin<Project> {
                 }
                 //</editor-fold>
                 androidExtensionConfig()(target, catalog)
+
+
             }
             tasks.withType<KotlinCompile>().configureEach {
                 kotlinOptions {
@@ -113,6 +144,13 @@ open class AndroidConfig : Plugin<Project> {
                 dependenciesConfig()(catalog)
             }
             log("=========================== END【${this@AndroidConfig}】 =========================")
+
+//            生成apk地址
+//            com.android.build.gradle.internal.variant.VariantPathHelper.getApkLocation
+//            com.android.build.gradle.internal.variant.VariantPathHelper.getDefaultApkLocation
+//            layout.buildDirectory.set(f.absolutePath)
+//            修改as生成缓存的地址
+
         }
     }
 }

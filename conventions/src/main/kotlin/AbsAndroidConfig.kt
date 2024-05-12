@@ -33,7 +33,7 @@ abstract class AbsAndroidConfig : Plugin<Project> {
      *     }
      * ```
      */
-    abstract fun androidExtensionConfig(): AndroidExtension.(Project, VersionCatalog) -> Unit
+    abstract fun androidExtensionConfig(): AndroidCommonExtension.(Project, VersionCatalog) -> Unit
 
 
     abstract fun kotlinOptionsConfig(): KotlinCommonToolOptions.(Project) -> Unit
@@ -52,11 +52,13 @@ abstract class AbsAndroidConfig : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             log("=========================== START【${this@AbsAndroidConfig}】 =========================")
+            log("常见构建自定义的即用配方，展示如何使用Android Gradle插件的公共API和DSL:")
+            log("https://github.com/android/gradle-recipes")
             with(pluginManager) {
                 pluginConfigs()()
             }
             val catalog = vlibs
-            android?.apply {
+            androidExtension?.apply {
                 androidExtensionConfig()(target, catalog)
             }
             tasks.withType<KotlinCompile>().configureEach {
