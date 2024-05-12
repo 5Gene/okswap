@@ -1,8 +1,8 @@
 plugins {
     id("com.android.library")
-    id("spark.build.android.compose")
-    id("spark.build.protobuf")
-//    id("spark.build.protobuf-convention")
+    id("io.github.5hmlA.android.compose")
+    id("io.github.5hmlA.protobuf")
+//    id("io.github.5hmlA.protobuf-convention")
 //    id("protobuf-convention")
 }
 

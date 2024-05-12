@@ -47,8 +47,8 @@ dependencies {
 "======== superclass= ${this.javaClass.superclass}".print()
 "======== rootProject= $rootProject".print()
 
-group = "spark.build"
-version = "1.3"
+group = "io.github.5hmlA"
+version = "0.1"
 
 //学习如何使用 agp api
 // https://github.com/android/gradle-recipes/tree/agp-8.4
@@ -84,34 +84,34 @@ tasks.create("before publishPlugins") {
 
 tasks.findByName("publishPlugins")?.doFirst {
     //不太明白为什么这里也报错 Extension of type 'GradlePluginDevelopmentExtension' does not exist
-    val plugins = extensions.getByType<GradlePluginDevelopmentExtension>().plugins
-    plugins.forEach {
-        println("- plugin -- ${it.name} ${it.id} ${it.displayName}")
-    }
+//    val plugins = extensions.getByType<GradlePluginDevelopmentExtension>().plugins
+//    plugins.forEach {
+//        println("- plugin -- ${it.name} ${it.id} ${it.displayName}")
+//    }
 }
 
 gradlePlugin {
-    website = "https://github.com/5hmlA/jspark"
-    vcsUrl = "https://github.com/5hmlA/jspark"
+    website = "https://github.com/5hmlA/conventions"
+    vcsUrl = "https://github.com/5hmlA/conventions"
     plugins {
         register("android-config") {
             id = "${group}.android"
             displayName = "android config plugin"
-            description = "android config plugin"
+            description = "android build common config for build.gradle, this will auto add android necessary dependencies"
             tags = listOf("config", "android", "convention")
             implementationClass = "AndroidConfig"
         }
         register("android-compose") {
             id = "${group}.android.compose"
             displayName = "android compose config plugin"
-            description = "android compose config plugin"
+            description = "android compose config for build.gradle, necessary related settings for compose will be automatically set"
             tags = listOf("compose", "config", "android", "convention")
             implementationClass = "AndroidComposeConfig"
         }
         register("protobuf-config") {
             id = "${group}.protobuf"
             displayName = "protobuf config plugin"
-            description = "protobuf config plugin"
+            description = "protobuf config for any gradle project, necessary configuration and dependencies will be automatically set up"
             tags = listOf("protobuf", "config", "convention")
             implementationClass = "ProtobufConfig"
         }
@@ -130,14 +130,14 @@ gradlePlugin {
     //因为通过 xxx.gradle.kts创建的预编译脚本 会自动创建plugin但是没设置displayName和description
     //所以这里判断补充必要数据否则发布不了，执行 [plugin portal -> publishPlugins]的时候会报错
     val plugins = extensions.getByType<GradlePluginDevelopmentExtension>().plugins
-//    plugins.forEach {
-//        if (it.displayName.isNullOrEmpty()) {
-//            it.id = "$group.${it.id}"
-//            it.displayName = "protobuf convention plugin"
-//            it.description = "protobuf convention plugin"
-//            it.tags = listOf("protobuf", "config", "convention")
-//        }
-//    }
+    plugins.forEach {
+        if (it.displayName.isNullOrEmpty()) {
+            it.id = "$group.${it.id}"
+            it.displayName = "protobuf convention plugin"
+            it.description = "protobuf convention for any gradle project, necessary configuration and dependencies will be automatically set up"
+            it.tags = listOf("protobuf", "config", "convention")
+        }
+    }
     plugins.forEach {
         "- plugin -- ${it.name} ${it.id} ${it.displayName}".print()
     }

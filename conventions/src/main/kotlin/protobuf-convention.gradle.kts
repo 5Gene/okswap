@@ -17,7 +17,7 @@
 //    本地引用
 //    id("protobuf-convention")
 //     发布插件后远程引用
-//    id("spark.build.protobuf-convention")
+//    id("io.github.5hmlA.protobuf-convention")
 //}
 
 log("=========================== START【${this}】 =========================")

@@ -2,8 +2,8 @@ plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
 //    id("protobuf-convention")
-//    id("spark.build.protobuf")
-    id("spark.build.protobuf")
+//    id("io.github.5hmlA.protobuf")
+    id("io.github.5hmlA.protobuf")
 }
 
 //apply<ProtobufConfig>()
