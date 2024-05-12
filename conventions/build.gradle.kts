@@ -30,7 +30,7 @@ dependencies {
     val agp = sysprop("dep.agp.ver", "8.2.0")
     val kagp = sysprop("dep.kagp.ver", "1.9.24")
     val pgp = sysprop("dep.pgp.ver", "0.9.4")
-//    compileOnly("com.android.tools.build:gradle:$agp")
+    compileOnly("com.android.tools.build:gradle:$agp")
     compileOnly("com.android.tools.build:gradle-api:$agp")
     compileOnly("com.gradle.publish:plugin-publish-plugin:1.2.1")
     compileOnly(gradleApi())

@@ -4,7 +4,8 @@ plugins {
     id("io.github.5hmlA.protobuf")
 }
 
-apply<AndroidComposeConfig>()
+apply<TestConfig>()
+//apply<AndroidComposeConfig>()
 //为啥不能这么引用
 //apply<ProtobufConfig>()
 
