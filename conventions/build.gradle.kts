@@ -73,8 +73,7 @@ publishing {
 tasks.create("before publishPlugins") {
     doFirst {
         " >> do First before publishPlugins".print()
-//        这个task在执行publishPlugins这个task之前执行，此时无法获取到下面的extension
-//        val plugins = extensions.getByType<GradlePluginDevelopmentExtension>().plugins
+//        val plugins = rootProject.extensions.getByType<GradlePluginDevelopmentExtension>().plugins
 //        plugins.forEach {
 //            println("- plugin -- ${it.name} ${it.id} ${it.displayName}")
 //        }
@@ -83,14 +82,17 @@ tasks.create("before publishPlugins") {
 }
 
 tasks.findByName("publishPlugins")?.doFirst {
+    //doFirst on task ':conventions:publishPlugins'
+    ">> doFirst on $this ${this.javaClass}".print()
     //不太明白为什么这里也报错 Extension of type 'GradlePluginDevelopmentExtension' does not exist
-    println("xxxxxxxxxxxxxxxxxx ${this.javaClass}")
+    //因为取错对象的extensions了，这里的this是com.gradle.publish.PublishTask_Decorated, 这个task也有extensions
     val plugins = rootProject.extensions.getByType<GradlePluginDevelopmentExtension>().plugins
     plugins.removeIf {
+        //移除不能上传的插件
         it.displayName.isNullOrEmpty()
     }
     plugins.forEach {
-        println("- plugin xxxxxxxxxxxxxxxxxx-- ${it.name} ${it.id} ${it.displayName}")
+        "- plugin to publish > ${it.name} ${it.id} ${it.displayName}".print()
     }
 }
 
