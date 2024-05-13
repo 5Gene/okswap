@@ -1,8 +1,8 @@
 plugins {
     `kotlin-dsl`
     `kotlin-dsl-precompiled-script-plugins`
-    `java-library`
-    `maven-publish`
+//    `maven-publish`
+    //define『plugin portal -> publishPlugins』 task
     id("com.gradle.plugin-publish") version "1.2.1"
 }
 
@@ -50,8 +50,6 @@ dependencies {
 group = "io.github.5hmlA"
 version = "0.1"
 
-//学习如何使用 agp api
-// https://github.com/android/gradle-recipes/tree/agp-8.4
 publishing {
     repositories {
         maven {
@@ -70,17 +68,7 @@ publishing {
     }
 }
 
-tasks.create("before publishPlugins") {
-    doFirst {
-        " >> do First before publishPlugins".print()
-//        val plugins = rootProject.extensions.getByType<GradlePluginDevelopmentExtension>().plugins
-//        plugins.forEach {
-//            println("- plugin -- ${it.name} ${it.id} ${it.displayName}")
-//        }
-    }
-    tasks.findByName("publishPlugins")?.dependsOn(this)
-}
-
+//插件推送之前 先去掉不符合规范的插件
 tasks.findByName("publishPlugins")?.doFirst {
     //doFirst on task ':conventions:publishPlugins'
     ">> doFirst on $this ${this.javaClass}".print()

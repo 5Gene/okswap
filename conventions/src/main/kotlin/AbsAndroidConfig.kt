@@ -9,6 +9,12 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonToolOptions
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+
+/**
+ *
+ * 学习如何使用 agp api
+ * https://github.com/android/gradle-recipes/tree/agp-8.4
+ */
 abstract class AbsAndroidConfig : Plugin<Project> {
 
     /**

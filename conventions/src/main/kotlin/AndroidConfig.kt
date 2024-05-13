@@ -143,8 +143,9 @@ open class AndroidConfig : Plugin<Project> {
     private fun Project.buildCacheDir() {
         log("========= Project.layout ${layout.buildDirectory.javaClass} ${layout.buildDirectory.asFile.get().absolutePath}")
         log("👉 set『build.cache.root.dir=D』can change build cache dir to D:/0buildCache/")
-//            log("========= Project.buildDir ${buildDir} =========================")
-        properties["build.cache.root.dir"]?.let {
+//      log("========= Project.buildDir ${buildDir} =========================")
+        val buildDir = properties["build.cache.root.dir"] ?: System.getenv("build.cache.root.dir")
+        buildDir?.let {
             //https://github.com/gradle/gradle/issues/20210
             //https://docs.gradle.org/current/userguide/upgrading_version_8.html#deprecations
             layout.buildDirectory.set(File("$it:/0buildCache/${rootProject.name}/${project.name}"))
