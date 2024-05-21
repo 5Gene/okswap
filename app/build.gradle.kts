@@ -4,11 +4,6 @@ plugins {
     id("io.github.5hmlA.protobuf")
 }
 
-//apply<AndroidComposeConfig>()
-//apply<ProtobufConfig>()
-apply<TestConfig>()
-
-
 android {
     defaultConfig {
         changeAPkName("newNaame")
@@ -64,11 +59,6 @@ android {
 //    }
 
 //    sourceSets.getByName("main").java.srcDirs(protobuf.generatedFilesBaseDir)
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
-    }
 
     buildFeatures {
         viewBinding = true

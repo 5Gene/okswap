@@ -2,12 +2,8 @@ plugins {
     id("com.android.library")
     id("io.github.5hmlA.android.compose")
     id("io.github.5hmlA.protobuf")
+    id("io.github.5hmlA.knife")
 }
-
-apply<TestConfig>()
-//apply<AndroidComposeConfig>()
-//为啥不能这么引用
-//apply<ProtobufConfig>()
 
 rootProject.ext["GROUP_ID"] = "osp.sparkj.ok"
 rootProject.ext["ARTIFACT_ID"] = "okswap-bluetooth"

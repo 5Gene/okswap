@@ -1,8 +1,6 @@
 plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
-//    id("protobuf-convention")
-//    id("io.github.5hmlA.protobuf")
     id("io.github.5hmlA.protobuf")
 }
 

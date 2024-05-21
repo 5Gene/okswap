@@ -1,3 +1,5 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -6,27 +8,23 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    versionCatalogs {
+        // declares an additional catalog, named 'testLibs', from the 'test-libs.versions.toml' file
+        create("wings") {
+            from(files("gradle/wings.versions.toml"))
+        }
+    }
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
     repositories {
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven {
-            url = uri("https://maven.pkg.github.com/5hmlA/sparkj")
-            credentials {
-                // https://www.sojson.com/ascii.html
-                username = '''\u005a\u0075\u0059\u0075\u006e'''
-                password = '''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'''
-            }
-        }
     }
 }
 
 rootProject.name = "okswap"
 
-includeBuild("conventions")
-
-//include ':app'
-//include ':okswap'
-//include ':okswap-bluetooth'
-//include ':okswap-ipc'
+include ':app'
+include ':okswap'
+include ':okswap-bluetooth'
+include ':okswap-ipc'

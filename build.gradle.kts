@@ -6,7 +6,10 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
-    alias(libs.plugins.protobuf) apply false
+    alias(wings.plugins.protobuf) apply false
+    alias(wings.plugins.android) apply false
+    alias(wings.plugins.compose) apply false
+    alias(wings.plugins.knife) apply false
 }
 
 //buildscript {
