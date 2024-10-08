@@ -29,6 +29,11 @@ fun interface Interceptor<Request, Response> {
          */
         inline operator fun <Request, Response> invoke(crossinline block: (chain: Chain<Request, Response>) -> Response): Interceptor<Request, Response> =
             Interceptor { block(it) }
+//            object : Interceptor<Request, Response> {
+//                override suspend fun intercept(chain: Chain<Request, Response>): Response {
+//                    return block(chain)
+//                }
+//            }
     }
 
     interface Chain<Request, Response> {

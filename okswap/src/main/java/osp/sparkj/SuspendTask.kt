@@ -10,9 +10,7 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.suspendCoroutine
 
-
 val handles = mutableMapOf<String, Channel<(Continuation<in Any>) -> Unit>>()
-
 
 class ThreadScope(
     val name: String

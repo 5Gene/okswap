@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "osp.sparkj.okswap.ipc"
+    namespace = "osp.sparkj.okswap.p2p"
 }
 
 dependencies {

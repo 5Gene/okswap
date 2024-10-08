@@ -1,7 +1,13 @@
+import wing.changeAPkName
+import wing.defineBool
+import wing.defineInt
+import wing.defineStr
+
 plugins {
-    id("com.android.application")
-    id("io.github.5hmlA.android.compose")
-    id("io.github.5hmlA.protobuf")
+    alias(vcl.plugins.android.application)
+    alias(vcl.plugins.gene.compose)
+    alias(vcl.plugins.gene.protobuf)
+//    alias(vcl.plugins.gene.knife)
 }
 
 android {
@@ -57,20 +63,10 @@ android {
 //        it.java.srcDirs(protobuf.generatedFilesBaseDir)
 //        println(" source set ${it.name}")
 //    }
-
 //    sourceSets.getByName("main").java.srcDirs(protobuf.generatedFilesBaseDir)
 
     buildFeatures {
         viewBinding = true
-    }
-
-    androidComponents {
-//        beforeVariants { variantBuilder ->
-//            println("====================================== ${variantBuilder.name}")
-//            variantBuilder.productFlavors.forEach { flavor ->
-//                println("====================================== $flavor")
-//            }
-//        }
     }
 
     namespace = "osp.sparkj.more"

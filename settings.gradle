@@ -1,5 +1,3 @@
-import org.gradle.api.initialization.resolve.RepositoriesMode
-
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -7,18 +5,21 @@ pluginManagement {
         mavenCentral()
     }
 }
+
+
+plugins {
+    id("io.github.5hmlA.vcl") version "24.10.01"
+}
+
 dependencyResolutionManagement {
     versionCatalogs {
-        // declares an additional catalog, named 'testLibs', from the 'test-libs.versions.toml' file
         create("wings") {
             from(files("gradle/wings.versions.toml"))
         }
     }
-    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
     repositories {
         google()
         mavenCentral()
-        gradlePluginPortal()
     }
 }
 
@@ -28,3 +29,4 @@ include ':app'
 include ':okswap'
 include ':okswap-bluetooth'
 include ':okswap-ipc'
+include ':okswap-p2p'
