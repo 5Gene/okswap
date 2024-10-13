@@ -21,6 +21,10 @@ android {
 //        signingConfig = signingConfigs.debug
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
 //    signingConfigs {
 //        debug {
 //            storeFile file('android.keystore')
