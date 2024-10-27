@@ -1,7 +1,7 @@
-import wing.changeAPkName
-import wing.defineBool
-import wing.defineInt
-import wing.defineStr
+import june.wing.changeApkName
+import june.wing.defineBool
+import june.wing.defineInt
+import june.wing.defineStr
 
 plugins {
     alias(vcl.plugins.android.application)
@@ -12,7 +12,7 @@ plugins {
 
 android {
     defaultConfig {
-        changeAPkName("newNaame")
+        changeApkName("newNaame")
         defineStr("strrr", "xxxxx")
         defineBool("boooo", false)
         vectorDrawables {
