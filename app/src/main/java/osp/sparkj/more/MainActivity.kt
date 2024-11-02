@@ -14,8 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.heytap.health.owconnect.OWClinic
-import com.heytap.health.owconnect.globalContext
 import osp.sparkj.okswap.bluetooth.BtStateBox
 import osp.sparkj.ui.theme.MoreTheme
 
@@ -28,8 +26,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 //        val flow: Flow<String>? = null
 //        flow?.collectAsState()
-        globalContext = applicationContext
-        requestPermissions(arrayOf(android.Manifest.permission.BLUETOOTH_CONNECT), 0)
+//        requestPermissions(arrayOf(android.Manifest.permission.BLUETOOTH_CONNECT), 0)
 //        bluetoothLifecycle {
 //            bluetoothScope.launch {  }
 //        }
@@ -56,9 +53,6 @@ class MainActivity : ComponentActivity() {
                                 Text(text = state.toString())
                             }
                         }
-
-                        OWClinic()
-
                     }
                 }
             }
