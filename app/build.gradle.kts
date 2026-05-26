@@ -10,9 +10,12 @@ plugins {
 //    alias(vcl.plugins.gene.knife)
 }
 
+base {
+    archivesName.set("newNaame")
+}
 android {
     defaultConfig {
-        changeApkName("newNaame")
+//        changeApkName("newNaame")
         defineStr("strrr", "xxxxx")
         defineBool("boooo", false)
         vectorDrawables {
